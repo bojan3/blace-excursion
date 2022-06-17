@@ -46,6 +46,10 @@ public class AuthenticationController {
 
 		// Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
 		// AuthenticationException
+		
+		System.out.println(authenticationRequest.getUsername());
+		System.out.println(authenticationRequest.getPassword());
+		
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 				authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
@@ -55,6 +59,9 @@ public class AuthenticationController {
 
 		// Kreiraj token za tog korisnika
 		User user = (User) authentication.getPrincipal();
+		
+		System.out.println(user);
+		
 		String jwt = tokenUtils.generateToken(user.getUsername());
 		int expiresIn = tokenUtils.getExpiredIn();
 
