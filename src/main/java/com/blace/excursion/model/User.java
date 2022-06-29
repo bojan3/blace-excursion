@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 // POJO koji implementira Spring Security UserDetails interfejs koji specificira
 // osnovne osobine Spring korisnika (koje role ima, da li je nalog zakljucan, istekao, da li su kredencijali istekli)
 @Entity
-//@Table(name = "USERS")
+@Table(name = "USERS")
 public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -59,6 +59,17 @@ public class User implements UserDetails {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private List<Role> roles;
+
+	@Column(name = "phone_number")
+	private String phoneNumber;
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
 	public Long getId() {
 		return id;

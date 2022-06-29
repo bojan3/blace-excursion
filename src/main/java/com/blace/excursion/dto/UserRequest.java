@@ -1,6 +1,5 @@
 package com.blace.excursion.dto;
 
-// DTO koji preuzima podatke iz HTML forme za registraciju
 public class UserRequest {
 
 	private Long id;
@@ -9,11 +8,21 @@ public class UserRequest {
 
 	private String password;
 
-	private String firstname;
+	private String firstName;
 
-	private String lastname;
-	
+	private String lastName;
+
 	private String email;
+
+	private String phoneNumber;
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
 	public String getUsername() {
 		return username;
@@ -31,20 +40,20 @@ public class UserRequest {
 		this.password = password;
 	}
 
-	public String getFirstname() {
-		return firstname;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getLastname() {
-		return lastname;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public Long getId() {
@@ -61,6 +70,12 @@ public class UserRequest {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "UserRequest [id=" + id + ", username=" + username + ", password=" + password + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", email=" + email + ", phoneNumber=" + phoneNumber + "]";
 	}
 
 }

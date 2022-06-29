@@ -12,20 +12,19 @@ import com.blace.excursion.service.RoleService;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-  @Autowired
-  private RoleRepository roleRepository;
+	@Autowired
+	private RoleRepository roleRepository;
 
-  @Override
-  public Role findById(Long id) {
-    Role auth = this.roleRepository.getOne(id);
-    return auth;
-  }
+	@Override
+	public Role findById(Long id) {
+		Role auth = this.roleRepository.getOne(id);
+		return auth;
+	}
 
-  @Override
-  public List<Role> findByName(String name) {
-	List<Role> roles = this.roleRepository.findByName(name);
-    return roles;
-  }
-
+	@Override
+	public List<Role> findByName(String name) {
+		List<Role> roles = this.roleRepository.findByName(name);
+		return roles;
+	}
 
 }

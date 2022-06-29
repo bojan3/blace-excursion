@@ -29,6 +29,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findByUsername(String username) throws UsernameNotFoundException {
+		User user = userRepository.findByUsername(username);
 		return userRepository.findByUsername(username);
 	}
 
@@ -42,23 +43,21 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User save(UserRequest userRequest) {
-		User u = new User();
-		u.setUsername(userRequest.getUsername());
+		User user = new User();
+		user.setUsername(userRequest.getUsername());
 		
-		// pre nego sto postavimo lozinku u atribut hesiramo je kako bi se u bazi nalazila hesirana lozinka
-		// treba voditi racuna da se koristi isi password encoder bean koji je postavljen u AUthenticationManager-u kako bi koristili isti algoritam
-		u.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+		user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 		
-		u.setFirstName(userRequest.getFirstname());
-		u.setLastName(userRequest.getLastname());
-		u.setEnabled(true);
-		u.setEmail(userRequest.getEmail());
+		user.setFirstName(userRequest.getFirstName());
+		user.setLastName(userRequest.getLastName());
+		user.setEnabled(true);
+		user.setEmail(userRequest.getEmail());
+		user.setPhoneNumber(userRequest.getPhoneNumber());
 
-		// u primeru se registruju samo obicni korisnici i u skladu sa tim im se i dodeljuje samo rola USER
-		List<Role> roles = roleService.findByName("ROLE_USER");
-		u.setRoles(roles);
+		List<Role> roles = roleService.findByName("ROLE_CLIENT");
+		user.setRoles(roles);
 		
-		return this.userRepository.save(u);
+		return this.userRepository.save(user);
 	}
 
 }
