@@ -14,4 +14,6 @@ public interface TourGuideService {
 
 	List<ExcursionDTO> getExcursions();
 
+	Boolean cancelExcursion(Long excursionId);
+
 }

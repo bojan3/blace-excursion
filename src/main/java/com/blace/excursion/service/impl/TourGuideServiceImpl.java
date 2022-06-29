@@ -134,18 +134,29 @@ public class TourGuideServiceImpl implements TourGuideService {
 
 	@Override
 	public List<ExcursionDTO> getExcursions() {
-		TourGuide tourGuide = tourGuideRepository.getByUserId(getUserId());
-		return excursionsToDTO(tourGuide.getExcursions());
+		List<Excursion> excursions = excursionRepository.getByUserIdNotCancelled(getTourGuideId());
+		return excursionsToDTO(excursions);
 	}
 
-	private List<ExcursionDTO> excursionsToDTO(Set<Excursion> excursions) {
+	private Long getTourGuideId() {
+		return tourGuideRepository.getByUserId(getUserId()).getId();
+	}
+
+	private List<ExcursionDTO> excursionsToDTO(List<Excursion> excursions) {
 		List<ExcursionDTO> excursionDTOs = new ArrayList<ExcursionDTO>();
-		Iterator<Excursion> it = excursions.iterator();
-		while (it.hasNext()) {
-			ExcursionDTO excursionDTO = new ExcursionDTO(it.next());
+		for(Excursion excursion: excursions) {
+			ExcursionDTO excursionDTO = new ExcursionDTO(excursion);
 			excursionDTOs.add(excursionDTO);
 		}
 		return excursionDTOs;
+	}
+
+	@Override
+	public Boolean cancelExcursion(Long excursionId) {
+		Excursion excursion  = excursionRepository.getOne(excursionId);
+		excursion.setCancelled(true);
+		excursionRepository.save(excursion);
+		return true;
 	}
 
 }
