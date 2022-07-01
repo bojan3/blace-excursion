@@ -24,7 +24,6 @@ import com.blace.excursion.model.User;
 import com.blace.excursion.service.UserService;
 import com.blace.excursion.util.TokenUtils;
 
-//Kontroler zaduzen za autentifikaciju korisnika
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {

@@ -52,8 +52,4 @@ public class ClientController {
 		clientService.createReservation(excursionDTO);
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
-// kreonuo da uradim kreiranje komentara
-//	@PostMapping("/")
-//	public ResponseEntity<CommentDTO>
-	
 }

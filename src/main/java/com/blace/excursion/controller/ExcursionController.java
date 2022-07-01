@@ -40,7 +40,6 @@ public class ExcursionController {
 		return new ResponseEntity<>(commentDTOs, HttpStatus.OK);
 	} 
 
-//	@PreAuthorize("hasAnyRole('CLIENT', 'ADMIN', 'TOURGUIDE')")
 	@GetMapping("/locations")
 	public ResponseEntity<List<LocationDTO>> getLocations(){
 		List<LocationDTO> locationDTOs = excursionService.getLocations();
