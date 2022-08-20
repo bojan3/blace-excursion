@@ -113,4 +113,5 @@ public class ExcursionDTO {
 				+ ", locationDTO=" + locationDTO + "]";
 	}
 
+	
 }

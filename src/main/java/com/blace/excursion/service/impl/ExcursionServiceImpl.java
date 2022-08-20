@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ import com.blace.excursion.repository.ExcursionRepository;
 import com.blace.excursion.repository.LocationRepository;
 import com.blace.excursion.repository.UserRepository;
 import com.blace.excursion.service.ExcursionService;
+
+import net.bytebuddy.jar.asm.commons.Remapper;
 
 @Service
 public class ExcursionServiceImpl implements ExcursionService {
@@ -111,4 +114,21 @@ public class ExcursionServiceImpl implements ExcursionService {
 		return locationDTOs;
 	}
 
+	@Override
+	public List<ExcursionDTO> getExcursionsSorted(String type, String order) {
+		List<Excursion> excursions = null;
+		if (order.equals("asc"))
+			excursions = excursionRepository.findAll(Sort.by(type).ascending());
+		else
+			excursions = excursionRepository.findAll(Sort.by(type).descending());
+		return excursionsToDTO(filterNotPass(excursions));
+	}
+
+	public List<Excursion> filterNotPass(List<Excursion> excursions) {
+		Iterator<Excursion> it = excursions.iterator();
+		while (it.hasNext())
+			if (!it.next().notPass())
+				it.remove();
+		return excursions;
+	}
 }

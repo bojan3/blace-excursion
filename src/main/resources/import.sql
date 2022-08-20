@@ -25,12 +25,12 @@ insert into location(name, description)	values ('Visoka Planina', 'Napredni snow
 
 insert into vehicle(name, max_number_of_persons) values ('Golf 2 GTI', 25);
 
-insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-06-21', 20, 100, 1, 1, 1);
+insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-09-21', 20, 100, 1, 1, 1);
 insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-05-19', 25, 120, 1, 1, 1);
 insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-05-15', 25, 110, 1, 1, 1);
 insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-05-16', 25, 90, 2, 1, 1);
 insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-05-17', 25, 90, 3, 1, 1);
-insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-07-25', 30, 90, 4, 1, 1);
+insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-09-25', 30, 90, 4, 1, 1);
 
 insert into reservation(client_id, excursion_id, number_of_persons, cancelled) values (1, 1, 5, FALSE);
 

@@ -16,4 +16,6 @@ public interface ExcursionService {
 
 	List<LocationDTO> getLocations();
 
+	List<ExcursionDTO> getExcursionsSorted(String type, String order);
+
 }

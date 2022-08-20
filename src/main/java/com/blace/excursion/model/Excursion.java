@@ -136,6 +136,10 @@ public class Excursion {
 		this.price = price;
 	}
 
+	public Boolean notPass() {
+		return this.date.after(new Date());
+	}
+	
 	@Override
 	public String toString() {
 		return "Excursion [id=" + id + ", date=" + date + ", cancelled=" + cancelled + ", maxNumberOfPersons="
