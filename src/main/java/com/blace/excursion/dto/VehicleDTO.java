@@ -13,16 +13,16 @@ public class VehicleDTO {
 	private String name;
 
 	private Integer maxNumberOfPersons;
-	
+
 	private Boolean canDelete;
 
 	public VehicleDTO(Vehicle vehicle) {
 		this.name = vehicle.getName();
 		this.maxNumberOfPersons = vehicle.getMaxNumberOfPersons();
 		this.canDelete = checkCanDelete(vehicle.getExcursions());
-		
+
 	}
-	
+
 	private Boolean checkCanDelete(Set<Excursion> excursions) {
 		Iterator<Excursion> it = excursions.iterator();
 		while (it.hasNext()) {
@@ -30,6 +30,30 @@ public class VehicleDTO {
 				return false;
 		}
 		return true;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getMaxNumberOfPersons() {
+		return maxNumberOfPersons;
+	}
+
+	public void setMaxNumberOfPersons(Integer maxNumberOfPersons) {
+		this.maxNumberOfPersons = maxNumberOfPersons;
+	}
+
+	public Boolean getCanDelete() {
+		return canDelete;
+	}
+
+	public void setCanDelete(Boolean canDelete) {
+		this.canDelete = canDelete;
 	}
 
 }

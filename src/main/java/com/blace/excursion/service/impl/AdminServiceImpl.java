@@ -1,5 +1,7 @@
 package com.blace.excursion.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +10,13 @@ import org.springframework.stereotype.Service;
 
 import com.blace.excursion.dto.CreateLocationDTO;
 import com.blace.excursion.dto.CreateVehicleDTO;
+import com.blace.excursion.dto.LocationDTO;
 import com.blace.excursion.dto.UserDTO;
 import com.blace.excursion.dto.UserRequest;
+import com.blace.excursion.dto.VehicleDTO;
 import com.blace.excursion.model.Location;
 import com.blace.excursion.model.Role;
+import com.blace.excursion.model.TourGuide;
 import com.blace.excursion.model.User;
 import com.blace.excursion.model.Vehicle;
 import com.blace.excursion.repository.LocationRepository;
@@ -64,6 +69,52 @@ public class AdminServiceImpl implements AdminService {
 		Location location = new Location(createLocationDTO);
 		this.locationRepository.save(location);
 		return true;
+	}
+
+	@Override
+	public List<UserDTO> getTourGuides() {
+		List<TourGuide> tourguides = this.tourGuideRepository.findAll();
+		return this.tourgouidesToDTO(tourguides);
+	}
+
+	private List<UserDTO> tourgouidesToDTO(List<TourGuide> tourguides) {
+		List<UserDTO> tourguideDTOs = new ArrayList<>();
+		Iterator<TourGuide> it = tourguides.iterator();
+		while (it.hasNext()) {
+			UserDTO tourguide = new UserDTO(it.next().getUser());
+			tourguideDTOs.add(tourguide);
+		}
+		return tourguideDTOs;
+	}
+
+	@Override
+	public List<LocationDTO> getLocations() {
+		List<Location> locations = this.locationRepository.findAll();
+		return this.locationsToDTO(locations);
+	}
+
+	private List<LocationDTO> locationsToDTO(List<Location> locations) {
+		List<LocationDTO> locationDTOs = new ArrayList<>();
+		Iterator<Location> it = locations.iterator();
+		while (it.hasNext()) {
+			locationDTOs.add(new LocationDTO(it.next()));
+		}
+		return locationDTOs;
+	}
+
+	@Override
+	public List<VehicleDTO> getVehicles() {
+		List<Vehicle> vehicles = vehicleRepository.findAll();
+		return this.vehiclesToDTO(vehicles);
+	}
+
+	private List<VehicleDTO> vehiclesToDTO(List<Vehicle> vehicles) {
+		List<VehicleDTO> vehicleDTOs = new ArrayList<>();
+		Iterator<Vehicle> it = vehicles.iterator();
+		while (it.hasNext()) {
+			vehicleDTOs.add(new VehicleDTO(it.next()));
+		}
+		return vehicleDTOs;
 	}
 
 }
