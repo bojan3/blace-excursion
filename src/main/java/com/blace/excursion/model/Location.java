@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.blace.excursion.dto.CreateLocationDTO;
+
 @Entity
 public class Location {
 
@@ -23,6 +25,10 @@ public class Location {
 	@OneToMany(mappedBy = "location")
 	private Set<Excursion> excursions;
 
+	public Location() {
+		super();
+	}
+
 	public Location(String name, String description, Set<Excursion> excursions) {
 		super();
 		this.name = name;
@@ -30,8 +36,9 @@ public class Location {
 		this.excursions = excursions;
 	}
 
-	public Location() {
-		super();
+	public Location(CreateLocationDTO createLocationDTO) {
+		this.name = createLocationDTO.getName();
+		this.description = createLocationDTO.getDescription();
 	}
 
 	public Set<Excursion> getExcursions() {

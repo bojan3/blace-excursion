@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.blace.excursion.dto.UserRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -61,6 +62,22 @@ public class User implements UserDetails {
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
+	public User() {
+		super();
+	}
+	
+	public User(UserRequest userRequest, List<Role> roles) {
+		super();
+		this.username = userRequest.getUsername();
+		this.password = userRequest.getPassword();
+		this.firstName = userRequest.getFirstName();
+		this.lastName = userRequest.getLastName();
+		this.enabled = true;
+		this.email = userRequest.getEmail();
+		this.phoneNumber = userRequest.getPhoneNumber();
+		this.roles = roles;
+	}
+	
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}

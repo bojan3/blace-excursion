@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.blace.excursion.dto.CreateVehicleDTO;
+
 @Entity
 public class Vehicle {
 	@Id
@@ -22,6 +24,10 @@ public class Vehicle {
 	@OneToMany(mappedBy = "vehicle")
 	private Set<Excursion> excursions;
 
+	public Vehicle() {
+		super();
+	}
+
 	public Vehicle(String name, Integer maxNumberOfPersons, Set<Excursion> excursions) {
 		super();
 		this.name = name;
@@ -29,8 +35,9 @@ public class Vehicle {
 		this.excursions = excursions;
 	}
 
-	public Vehicle() {
-		super();
+	public Vehicle(CreateVehicleDTO createVehicleDTO) {
+		this.name = createVehicleDTO.getName();
+		this.maxNumberOfPersons = createVehicleDTO.getMaxNumberOfPersons();
 	}
 
 	public Set<Excursion> getExcursions() {

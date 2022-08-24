@@ -24,38 +24,37 @@ import com.blace.excursion.service.TourGuideService;
 @RestController
 @RequestMapping(value = "/api/tourguide", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TourGuideController {
-	
+
 	private TourGuideService tourGuideService;
-	
-	
+
 	@Autowired
 	public TourGuideController(TourGuideService tourGuideService) {
 		this.tourGuideService = tourGuideService;
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<Boolean> createExcursion(@RequestBody CreateExcursionDTO createExcursionDTO){
+	public ResponseEntity<Boolean> createExcursion(@RequestBody CreateExcursionDTO createExcursionDTO) {
 		Boolean created = tourGuideService.createExcursion(createExcursionDTO);
 		if (created == false) {
 			return new ResponseEntity<>(created, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(created, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/pastExcursions")
-	public ResponseEntity<List<PastExcursionDTO>> getPastExcursions(){
+	public ResponseEntity<List<PastExcursionDTO>> getPastExcursions() {
 		List<PastExcursionDTO> pastExcursionDTOs = tourGuideService.getPastExcursions();
 		return new ResponseEntity<>(pastExcursionDTOs, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/excursions")
-	public ResponseEntity<List<ExcursionDTO>> getExcursions(){
+	public ResponseEntity<List<ExcursionDTO>> getExcursions() {
 		List<ExcursionDTO> excursionDTOs = tourGuideService.getExcursions();
 		return new ResponseEntity<>(excursionDTOs, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/cancel/{excursionId}")
-	public ResponseEntity<Boolean> cancelExcursion(@PathVariable Long excursionId){
+	public ResponseEntity<Boolean> cancelExcursion(@PathVariable Long excursionId) {
 		Boolean cancelled = this.tourGuideService.cancelExcursion(excursionId);
 		return new ResponseEntity<>(cancelled, HttpStatus.OK);
 	}

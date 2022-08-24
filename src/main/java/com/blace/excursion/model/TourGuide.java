@@ -21,7 +21,6 @@ public class TourGuide {
 	private User user;
 	@OneToMany(mappedBy = "tourGuide")
 	private Set<Excursion> excursions;
-	
 
 	public TourGuide(User user, Set<Excursion> excursions) {
 		super();

@@ -15,8 +15,6 @@ public class UserDTO {
 	private String email;
 	private List<String> roles;
 	private String phoneNumber;
-	
-	
 
 	public UserDTO(User user) {
 		super();
@@ -29,15 +27,15 @@ public class UserDTO {
 		this.phoneNumber = user.getPhoneNumber();
 	}
 
-	private List<String> rolesToString(User user){
+	private List<String> rolesToString(User user) {
 		List<String> roles = new ArrayList<String>();
-		for(Role role: user.getRoles()) {
+		for (Role role : user.getRoles()) {
 			roles.add(role.getName());
 		}
-		
+
 		return roles;
- 	}
-	
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -1,23 +1,39 @@
 package com.blace.excursion.dto;
 
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
+
+import com.blace.excursion.model.Excursion;
 import com.blace.excursion.model.Location;
 
 public class LocationDTO {
-	
+
 	private Long id;
 	private String name;
 	private String description;
+	private Boolean canDelete;
 
 	public LocationDTO(Location location) {
 		super();
 		this.id = location.getId();
 		this.name = location.getName();
 		this.description = location.getDescription();
+		this.canDelete = checkCanDelete(location.getExcursions());
+	}
+
+	private Boolean checkCanDelete(Set<Excursion> excursions) {
+		Iterator<Excursion> it = excursions.iterator();
+		while (it.hasNext()) {
+			if (it.next().getDate().before(new Date()))
+				return false;
+		}
+		return true;
 	}
 
 	public LocationDTO() {
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
