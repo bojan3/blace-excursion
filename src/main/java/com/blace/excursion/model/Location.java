@@ -22,6 +22,8 @@ public class Location {
 	private String name;
 	@Column
 	private String description;
+	@Column
+	private Boolean deleted;
 	@OneToMany(mappedBy = "location")
 	private Set<Excursion> excursions;
 
@@ -34,19 +36,13 @@ public class Location {
 		this.name = name;
 		this.description = description;
 		this.excursions = excursions;
+		this.deleted = false;
 	}
 
 	public Location(CreateLocationDTO createLocationDTO) {
 		this.name = createLocationDTO.getName();
 		this.description = createLocationDTO.getDescription();
-	}
-
-	public Set<Excursion> getExcursions() {
-		return excursions;
-	}
-
-	public void setExcursions(Set<Excursion> excursions) {
-		this.excursions = excursions;
+		this.deleted = false;
 	}
 
 	public Long getId() {
@@ -73,10 +69,20 @@ public class Location {
 		this.description = description;
 	}
 
-	@Override
-	public String toString() {
-		return "Location [id=" + id + ", name=" + name + ", description=" + description + ", excursions=" + excursions
-				+ "]";
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public Set<Excursion> getExcursions() {
+		return excursions;
+	}
+
+	public void setExcursions(Set<Excursion> excursions) {
+		this.excursions = excursions;
 	}
 
 }

@@ -58,8 +58,12 @@ public class LocationDTO {
 		this.description = description;
 	}
 
-	@Override
-	public String toString() {
-		return "LocationDTO [id=" + id + ", name=" + name + ", description=" + description + "]";
+	public Boolean getCanDelete() {
+		return canDelete;
 	}
+
+	public void setCanDelete(Boolean canDelete) {
+		this.canDelete = canDelete;
+	}
+
 }

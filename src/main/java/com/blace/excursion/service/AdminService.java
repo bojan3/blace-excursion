@@ -23,4 +23,9 @@ public interface AdminService {
 
 	List<VehicleDTO> getVehicles();
 
+	void deleteTourGuide(Long tourguideId);
+
+	void deleteVehicle(Long vehicleId);
+
+	void deleteLocation(Long locationId);
 }

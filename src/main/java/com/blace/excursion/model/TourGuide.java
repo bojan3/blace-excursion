@@ -19,6 +19,8 @@ public class TourGuide {
 	private Long id;
 	@OneToOne
 	private User user;
+	@Column
+	private Boolean deleted;
 	@OneToMany(mappedBy = "tourGuide")
 	private Set<Excursion> excursions;
 
@@ -26,6 +28,7 @@ public class TourGuide {
 		super();
 		this.user = user;
 		this.excursions = excursions;
+		this.deleted = false;
 	}
 
 	public TourGuide() {
@@ -48,17 +51,20 @@ public class TourGuide {
 		this.user = user;
 	}
 
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
 	public Set<Excursion> getExcursions() {
 		return excursions;
 	}
 
 	public void setExcursions(Set<Excursion> excursions) {
 		this.excursions = excursions;
-	}
-
-	@Override
-	public String toString() {
-		return "TourGuide [id=" + id + ", user=" + user + ", excursions=" + excursions + "]";
 	}
 
 }

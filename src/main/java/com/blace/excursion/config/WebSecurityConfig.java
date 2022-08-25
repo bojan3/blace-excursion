@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 								.antMatchers("/api/whoami").permitAll()
 								.antMatchers("/api/tourguide/**").hasRole("TOURGUIDE")
 								.antMatchers("/api/client/**").hasRole("CLIENT")
-								.antMatchers("/api/admin/**").permitAll()   //.hasRole("ADMIN")
+								.antMatchers("/api/admin/**").hasRole("ADMIN")
 			.anyRequest().authenticated().and()
 			
 			// za development svrhe ukljuci konfiguraciju za CORS iz WebConfig klase

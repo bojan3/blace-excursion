@@ -65,7 +65,7 @@ public class User implements UserDetails {
 	public User() {
 		super();
 	}
-	
+
 	public User(UserRequest userRequest, List<Role> roles) {
 		super();
 		this.username = userRequest.getUsername();
@@ -77,7 +77,7 @@ public class User implements UserDetails {
 		this.phoneNumber = userRequest.getPhoneNumber();
 		this.roles = roles;
 	}
-	
+
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}

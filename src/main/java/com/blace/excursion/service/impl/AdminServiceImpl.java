@@ -73,7 +73,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<UserDTO> getTourGuides() {
-		List<TourGuide> tourguides = this.tourGuideRepository.findAll();
+		List<TourGuide> tourguides = this.tourGuideRepository.findAllNotDeleted();
 		return this.tourgouidesToDTO(tourguides);
 	}
 
@@ -89,7 +89,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<LocationDTO> getLocations() {
-		List<Location> locations = this.locationRepository.findAll();
+		List<Location> locations = this.locationRepository.findAllNotDeleted();
 		return this.locationsToDTO(locations);
 	}
 
@@ -104,7 +104,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<VehicleDTO> getVehicles() {
-		List<Vehicle> vehicles = vehicleRepository.findAll();
+		List<Vehicle> vehicles = vehicleRepository.findAllNotDeleted();
 		return this.vehiclesToDTO(vehicles);
 	}
 
@@ -115,6 +115,28 @@ public class AdminServiceImpl implements AdminService {
 			vehicleDTOs.add(new VehicleDTO(it.next()));
 		}
 		return vehicleDTOs;
+	}
+
+	@Override
+	public void deleteTourGuide(Long tourguideId) {
+		TourGuide tourGuide = tourGuideRepository.getOne(tourguideId);
+		tourGuide.setDeleted(true);
+		tourGuide.getUser().setEnabled(false);
+		this.tourGuideRepository.save(tourGuide);
+	}
+
+	@Override
+	public void deleteVehicle(Long vehicleId) {
+		Vehicle vehicle = vehicleRepository.getOne(vehicleId);
+		vehicle.setDeleted(true);
+		this.vehicleRepository.save(vehicle);
+	}
+
+	@Override
+	public void deleteLocation(Long locationId) {
+		Location location = locationRepository.getOne(locationId);
+		location.setDeleted(true);
+		this.locationRepository.save(location);
 	}
 
 }

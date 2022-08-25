@@ -21,6 +21,9 @@ public class Vehicle {
 	private String name;
 	@Column
 	private Integer maxNumberOfPersons;
+	@Column
+	private Boolean deleted;
+
 	@OneToMany(mappedBy = "vehicle")
 	private Set<Excursion> excursions;
 
@@ -33,11 +36,13 @@ public class Vehicle {
 		this.name = name;
 		this.maxNumberOfPersons = maxNumberOfPersons;
 		this.excursions = excursions;
+		this.deleted = false;
 	}
 
 	public Vehicle(CreateVehicleDTO createVehicleDTO) {
 		this.name = createVehicleDTO.getName();
 		this.maxNumberOfPersons = createVehicleDTO.getMaxNumberOfPersons();
+		this.deleted = false;
 	}
 
 	public Set<Excursion> getExcursions() {
@@ -72,10 +77,12 @@ public class Vehicle {
 		this.maxNumberOfPersons = maxNumberOfPersons;
 	}
 
-	@Override
-	public String toString() {
-		return "Vehicle [id=" + id + ", name=" + name + ", maxNumberOfPersons=" + maxNumberOfPersons + ", excursions="
-				+ excursions + "]";
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }

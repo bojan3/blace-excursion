@@ -101,7 +101,7 @@ public class ExcursionServiceImpl implements ExcursionService {
 
 	@Override
 	public List<LocationDTO> getLocations() {
-		List<Location> locations = locationRepository.findAll();
+		List<Location> locations = locationRepository.findAllNotDeleted();
 		return locationsToDTO(locations);
 	}
 
