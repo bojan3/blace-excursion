@@ -27,23 +27,44 @@ insert into location(name, description, deleted)	values ('Visoka Planina', 'Napr
 insert into location(name, description, deleted)	values ('Lokacija za brisanje', 'Napredni snowboarder i skijaš početnik – naš tim za zimske sportove je prilično raznolik', FALSE);
 
 insert into vehicle(name, max_number_of_persons, deleted) values ('Golf 2 GTI', 25, false);
-insert into vehicle(name, max_number_of_persons, deleted) values ('Prevoz za brisanje', 10, false);
-insert into vehicle(name, max_number_of_persons, deleted) values ('Prevoz za brisanje', 10, false);
+insert into vehicle(name, max_number_of_persons, deleted) values ('Audi a3 sportback', 10, false);
+--insert into vehicle(name, max_number_of_persons, deleted) values ('Prevoz za brisanje', 10, false);
 
-insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-09-21', 20, 100, 1, 1, 1);
-insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-05-19', 25, 120, 1, 1, 1);
-insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-05-15', 25, 110, 1, 1, 1);
-insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-05-16', 25, 90, 2, 1, 1);
-insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-05-17', 25, 90, 3, 1, 1);
-insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-09-25', 30, 90, 4, 1, 1);
+--insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-11-21', 20, 100, 1, 1, 1);
+--insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-11-19', 25, 120, 1, 1, 1);
+--insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-11-15', 25, 110, 1, 1, 1);
+--insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-11-16', 25, 90, 2, 1, 1);
+--insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-11-17', 25, 90, 3, 1, 1);
+--insert into excursion(cancelled, date, max_number_of_persons, price, location_id, tour_guide_id, vehicle_id) values (FALSE, '2022-11-25', 30, 90, 4, 1, 1);
+
+insert into excursion(cancelled, date, max_number_of_persons, price, tour_guide_id) values (FALSE, '2022-11-21', 20, 100, 1);
+insert into excursion(cancelled, date, max_number_of_persons, price, tour_guide_id) values (FALSE, '2022-11-19', 25, 120, 1);
+insert into excursion(cancelled, date, max_number_of_persons, price, tour_guide_id) values (FALSE, '2022-11-15', 25, 110,, 1);
+insert into excursion(cancelled, date, max_number_of_persons, price, tour_guide_id) values (FALSE, '2022-11-16', 25, 90, 1);
+insert into excursion(cancelled, date, max_number_of_persons, price, tour_guide_id) values (FALSE, '2022-11-17', 25, 90, 1);
+insert into excursion(cancelled, date, max_number_of_persons, price, tour_guide_id) values (FALSE, '2022-11-25', 30, 90, 1);
+
+insert into excursion_locations(excursion_id, location_id) values (1, 1);
+insert into excursion_locations(excursion_id, location_id) values (1, 2);
+insert into excursion_locations(excursion_id, location_id) values (1, 3);
+insert into excursion_locations(excursion_id, location_id) values (2, 2);
+insert into excursion_locations(excursion_id, location_id) values (2, 3);
+insert into excursion_locations(excursion_id, location_id) values (2, 4);
+insert into excursion_locations(excursion_id, location_id) values (3, 4);
+insert into excursion_locations(excursion_id, location_id) values (3, 5);
+insert into excursion_locations(excursion_id, location_id) values (4, 2);
+insert into excursion_locations(excursion_id, location_id) values (4, 1);
+insert into excursion_locations(excursion_id, location_id) values (4, 4);
+insert into excursion_locations(excursion_id, location_id) values (5, 1);
+insert into excursion_locations(excursion_id, location_id) values (6, 4);
+
 
 insert into reservation(client_id, excursion_id, number_of_persons, cancelled) values (1, 1, 5, FALSE);
-
 insert into past_excursion(client_id, excursion_id, number_of_persons) values (1, 2, 4);
 insert into past_excursion(client_id, excursion_id, number_of_persons) values (1, 3, 5);
 insert into past_excursion(client_id, excursion_id, number_of_persons) values (1, 4, 4);
 insert into past_excursion(client_id, excursion_id, number_of_persons) values (1, 5, 2);
 
-insert into comment(rate, text, past_excursion_client_id, past_excursion_excursion_id) values (4, 'Bilo je lepo. Drusvo i ja smo bili zadovoljni provodom. Zaleli bi nekad ovako nesto ponovo da uradimo.', 1, 2);
-
-insert into liked_commnets(client_id, comment_id) values (1, 1);
+--insert into comment(rate, text, past_excursion_client_id, past_excursion_excursion_id) values (4, 'Bilo je lepo. Drusvo i ja smo bili zadovoljni provodom. Zaleli bi nekad ovako nesto ponovo da uradimo.', 1, 2);
+--
+--insert into liked_commnets(client_id, comment_id) values (1, 1);

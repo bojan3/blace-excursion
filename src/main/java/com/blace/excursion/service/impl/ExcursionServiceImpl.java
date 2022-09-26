@@ -59,9 +59,10 @@ public class ExcursionServiceImpl implements ExcursionService {
 
 	@Override
 	public List<CommentDTO> getComments(Long excursionId) {
-		Excursion excursion = excursionRepository.getOne(excursionId);
-		List<Comment> comments = getCommentsFromLocation(excursion.getLocation());
-		return commentsToDTO(comments, getUserId());
+//		Excursion excursion = excursionRepository.getOne(excursionId);
+//		List<Comment> comments = getCommentsFromLocation(excursion.getLocation());
+//		return commentsToDTO(comments, getUserId());
+		return null;
 
 	}
 

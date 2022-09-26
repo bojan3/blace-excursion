@@ -1,23 +1,24 @@
 package com.blace.excursion.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class CreateExcursionDTO {
 
 	private Date date;
 	private Integer maxNumberOfPersons;
 	private Integer price;
-	private Long locationId;
+	private List<Long> locationIds;
 
 	public CreateExcursionDTO() {
 	}
-	
-	public CreateExcursionDTO(Date date, Integer maxNumberOfPersons, Integer price, Long locationId) {
+
+	public CreateExcursionDTO(Date date, Integer maxNumberOfPersons, Integer price, List<Long> locationIds) {
 		super();
 		this.date = date;
 		this.maxNumberOfPersons = maxNumberOfPersons;
 		this.price = price;
-		this.locationId = locationId;
+		this.locationIds = locationIds;
 	}
 
 	public Date getDate() {
@@ -44,18 +45,18 @@ public class CreateExcursionDTO {
 		this.price = price;
 	}
 
-	public Long getLocationId() {
-		return locationId;
+	public List<Long> getLocationIds() {
+		return locationIds;
 	}
 
-	public void setLocationId(Long locationId) {
-		this.locationId = locationId;
+	public void setLocationIds(List<Long> locationIds) {
+		this.locationIds = locationIds;
 	}
 
 	@Override
 	public String toString() {
 		return "CreateExcursionDTO [date=" + date + ", maxNumberOfPersons=" + maxNumberOfPersons + ", price=" + price
-				+ ", locationId=" + locationId + "]";
+				+ ", locationIds=" + locationIds + "]";
 	}
 
 }

@@ -1,89 +1,88 @@
 package com.blace.excursion.model;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
+import javax.persistence.*;
 
 import org.springframework.util.backoff.BackOff;
 
 @Entity
 public class Reservation {
 
-	@EmbeddedId
-	private ReservationKey id;
-	@ManyToOne
-	@MapsId("clientId")
-	@JoinColumn(name = "client_id")
-	private Client client;
-	@ManyToOne
-	@MapsId("excursionId")
-	@JoinColumn(name = "excursion_id")
-	private Excursion excursion;
-	@Column
-	private Integer numberOfPersons;
-	@Column
-	private Boolean cancelled;
+    //	@EmbeddedId
+//	private ReservationKey id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public Reservation(ReservationKey reservationKey, Client client, Excursion excursion, Integer numberOfPersons) {
-		super();
-		this.id = reservationKey;
-		this.client = client;
-		this.excursion = excursion;
-		this.numberOfPersons = numberOfPersons;
-		this.cancelled = false;
-	}
+    @ManyToOne
+    @MapsId("clientId")
+    @JoinColumn(name = "client_id")
+    private Client client;
+    @ManyToOne
+    @MapsId("excursionId")
+    @JoinColumn(name = "excursion_id")
+    private Excursion excursion;
+    @Column
+    private Integer numberOfPersons;
+    @Column
+    private Boolean cancelled;
 
-	public Boolean getCancelled() {
-		return cancelled;
-	}
+    public Reservation(Client client, Excursion excursion, Integer numberOfPersons) {
+        super();
+        this.client = client;
+        this.excursion = excursion;
+        this.numberOfPersons = numberOfPersons;
+        this.cancelled = false;
+    }
 
-	public void setCancelled(Boolean cancelled) {
-		this.cancelled = cancelled;
-	}
+    public Boolean getCancelled() {
+        return cancelled;
+    }
 
-	public Reservation() {
-		super();
-	}
+    public void setCancelled(Boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 
-	public ReservationKey getId() {
-		return id;
-	}
+    public Reservation() {
+        super();
+    }
 
-	public void setId(ReservationKey id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public Client getClient() {
-		return client;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setClient(Client client) {
-		this.client = client;
-	}
+    public Client getClient() {
+        return client;
+    }
 
-	public Excursion getExcursion() {
-		return excursion;
-	}
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
-	public void setExcursion(Excursion excursion) {
-		this.excursion = excursion;
-	}
+    public Excursion getExcursion() {
+        return excursion;
+    }
 
-	public Integer getNumberOfPersons() {
-		return numberOfPersons;
-	}
+    public void setExcursion(Excursion excursion) {
+        this.excursion = excursion;
+    }
 
-	public void setNumberOfPersons(Integer numberOfPersons) {
-		this.numberOfPersons = numberOfPersons;
-	}
+    public Integer getNumberOfPersons() {
+        return numberOfPersons;
+    }
 
-	@Override
-	public String toString() {
-		return "Reservation [id=" + id + ", client=" + client + ", excursion=" + excursion + ", numberOfPersons="
-				+ numberOfPersons + ", cancelled=" + cancelled + "]";
-	}
+    public void setNumberOfPersons(Integer numberOfPersons) {
+        this.numberOfPersons = numberOfPersons;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation [id=" + id + ", client=" + client + ", excursion=" + excursion + ", numberOfPersons="
+                + numberOfPersons + ", cancelled=" + cancelled + "]";
+    }
 
 }

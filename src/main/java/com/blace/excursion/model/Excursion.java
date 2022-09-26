@@ -3,11 +3,16 @@ package com.blace.excursion.model;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -35,25 +40,27 @@ public class Excursion {
 	private Set<PastExcursion> pastExcursions;
 	@ManyToOne
 	private TourGuide tourGuide;
-	@ManyToOne
-	private Location location;
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "excursion_locations", joinColumns = @JoinColumn(name = "excursion_id"), inverseJoinColumns = @JoinColumn(name = "location_id"))
+	private Set<Location> locations;
 	@ManyToOne
 	private Vehicle vehicle;
 
-	public Excursion(Date date, Boolean cancelled, Integer maxNumberOfPersons, Integer price, TourGuide tourGuide, Location location,
-			Vehicle vehicle) {
+	public Excursion() {
+		super();
+	}
+
+	public Excursion(Date date, Boolean cancelled, Integer maxNumberOfPersons, Integer price, TourGuide tourGuide,
+			Set<Location> locations, Vehicle vehicle) {
 		super();
 		this.date = date;
 		this.cancelled = cancelled;
 		this.maxNumberOfPersons = maxNumberOfPersons;
 		this.price = price;
 		this.tourGuide = tourGuide;
-		this.location = location;
+		this.locations = locations;
 		this.vehicle = vehicle;
-	}
-
-	public Excursion() {
-		super();
 	}
 
 	public Set<Reservation> getReservations() {
@@ -80,12 +87,12 @@ public class Excursion {
 		this.tourGuide = tourGuide;
 	}
 
-	public Location getLocation() {
-		return location;
+	public Set<Location> getLocations() {
+		return locations;
 	}
 
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setLocations(Set<Location> locations) {
+		this.locations = locations;
 	}
 
 	public Vehicle getVehicle() {
@@ -139,12 +146,13 @@ public class Excursion {
 	public Boolean notPass() {
 		return this.date.after(new Date());
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Excursion [id=" + id + ", date=" + date + ", cancelled=" + cancelled + ", maxNumberOfPersons="
 				+ maxNumberOfPersons + ", price=" + price + ", reservations=" + reservations + ", pastExcursions="
-				+ pastExcursions + ", tourGuide=" + tourGuide + ", location=" + location + ", vehicle=" + vehicle + "]";
+				+ pastExcursions + ", tourGuide=" + tourGuide + ", locations=" + locations + ", vehicle=" + vehicle
+				+ "]";
 	}
 
 }

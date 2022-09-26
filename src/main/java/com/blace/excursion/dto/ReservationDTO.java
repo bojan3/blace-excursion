@@ -1,38 +1,33 @@
 package com.blace.excursion.dto;
 
 import com.blace.excursion.model.Reservation;
-import com.blace.excursion.model.ReservationKey;
 
 public class ReservationDTO {
 
-	private ReservationKey id;
-	private ExcursionDTO excursionDTO;
+    //	private ReservationKey id;
+    private Long id;
+    private ExcursionDTO excursion;
 
-	public ReservationDTO(Reservation reservation) {
-		super();
-		this.id = reservation.getId();
-		this.excursionDTO = new ExcursionDTO(reservation.getExcursion());
-	}
+    public ReservationDTO(Reservation reservation) {
+        super();
+        this.id = reservation.getId();
+        this.excursion = new ExcursionDTO(reservation.getExcursion());
+    }
 
-	public ReservationKey getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(ReservationKey id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public ExcursionDTO getExcursionDTO() {
-		return excursionDTO;
-	}
+    public ExcursionDTO getExcursion() {
+        return excursion;
+    }
 
-	public void setExcursionDTO(ExcursionDTO excursionDTO) {
-		this.excursionDTO = excursionDTO;
-	}
-
-	@Override
-	public String toString() {
-		return "ReservationDTO [id=" + id + ", excursionDTO=" + excursionDTO + "]";
-	}
-
+    public void setExcursion(ExcursionDTO excursion) {
+        this.excursion = excursion;
+    }
+    
 }

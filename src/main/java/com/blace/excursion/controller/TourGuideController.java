@@ -2,6 +2,7 @@ package com.blace.excursion.controller;
 
 import java.util.List;
 
+import com.blace.excursion.dto.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,12 +34,12 @@ public class TourGuideController {
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<Boolean> createExcursion(@RequestBody CreateExcursionDTO createExcursionDTO) {
-		Boolean created = tourGuideService.createExcursion(createExcursionDTO);
-		if (created == false) {
-			return new ResponseEntity<>(created, HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<>(created, HttpStatus.OK);
+	public ResponseEntity<Message> createExcursion(@RequestBody CreateExcursionDTO createExcursionDTO) {
+		Message message = tourGuideService.createExcursion(createExcursionDTO);
+//		if (created == false) {
+//			return new ResponseEntity<>(created, HttpStatus.BAD_REQUEST);
+//		}
+		return new ResponseEntity<>(message, HttpStatus.OK);
 	}
 
 	@GetMapping("/pastExcursions")

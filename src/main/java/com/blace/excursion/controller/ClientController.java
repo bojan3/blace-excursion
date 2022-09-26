@@ -35,9 +35,9 @@ public class ClientController {
 		return new ResponseEntity<>(reservationDTOs, HttpStatus.OK);
 	}
 	
-	@GetMapping("/reservation/cancel/{excursionId}")
-	public ResponseEntity<Boolean> cancelReservation(@PathVariable Long excursionId){
-		Boolean cancelled = clientService.cancelReservation(excursionId);
+	@GetMapping("/reservation/cancel/{reservationId}")
+	public ResponseEntity<Boolean> cancelReservation(@PathVariable Long reservationId){
+		Boolean cancelled = clientService.cancelReservation(reservationId);
 		return new ResponseEntity<>(cancelled, HttpStatus.OK);
 	}
 	
@@ -47,7 +47,7 @@ public class ClientController {
 		return new ResponseEntity<>(pastExcursionDTOs, HttpStatus.OK);
 	}
 	
-	@PostMapping("/createReservatin")
+	@PostMapping("/createReservation")
 	public ResponseEntity<Boolean> createReservatin(@RequestBody ExcursionDTO excursionDTO){
 		clientService.createReservation(excursionDTO);
 		return new ResponseEntity<>(true, HttpStatus.OK);

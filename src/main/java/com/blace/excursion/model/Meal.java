@@ -1,48 +1,38 @@
 package com.blace.excursion.model;
 
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-
-import com.blace.excursion.dto.CreateLocationDTO;
 
 @Entity
-public class Location {
+public class Meal {
 
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column
-	private String name;
-	@Column
-	private String description;
-	@Column
-	private Boolean deleted;
-	@ManyToMany(mappedBy = "locations")
-	private Set<Excursion> excursions;
 
-	public Location() {
+	private String name;
+
+	private String description;
+
+	private Integer price;
+
+	private Boolean deleted;
+
+	public Meal() {
 		super();
 	}
 
-	public Location(String name, String description, Set<Excursion> excursions) {
+	public Meal(Long id, String name, String description, Integer price, Boolean deleted) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.excursions = excursions;
-		this.deleted = false;
-	}
-
-	public Location(CreateLocationDTO createLocationDTO) {
-		this.name = createLocationDTO.getName();
-		this.description = createLocationDTO.getDescription();
-		this.deleted = false;
+		this.price = price;
+		this.deleted = deleted;
 	}
 
 	public Long getId() {
@@ -69,20 +59,20 @@ public class Location {
 		this.description = description;
 	}
 
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+
 	public Boolean getDeleted() {
 		return deleted;
 	}
 
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
-	}
-
-	public Set<Excursion> getExcursions() {
-		return excursions;
-	}
-
-	public void setExcursions(Set<Excursion> excursions) {
-		this.excursions = excursions;
 	}
 
 }

@@ -1,10 +1,13 @@
 package com.blace.excursion.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import com.blace.excursion.model.Excursion;
+import com.blace.excursion.model.Location;
 import com.blace.excursion.model.Reservation;
 import com.blace.excursion.model.TourGuide;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -17,7 +20,7 @@ public class ExcursionDTO {
 	private Integer numberOfPerosns;
 	private Integer price;
 	private String tourGuideName;
-	private LocationDTO locationDTO;
+	private List<LocationDTO> locations;
 
 	public ExcursionDTO(Excursion excursion) {
 		super();
@@ -27,12 +30,20 @@ public class ExcursionDTO {
 		this.numberOfPerosns = calculateNumberOfPersons(excursion);
 		this.price = excursion.getPrice();
 		this.tourGuideName = getTourGuideName(excursion.getTourGuide());
-		this.locationDTO = new LocationDTO(excursion.getLocation());
+		this.locations = locationsToDTO(excursion.getLocations());
+	}
+
+	private List<LocationDTO> locationsToDTO(Set<Location> locations) {
+		List<LocationDTO> locationDTOs = new ArrayList<>();
+		Iterator<Location> it = locations.iterator();
+		while (it.hasNext())
+			locationDTOs.add(new LocationDTO(it.next()));
+		return locationDTOs;
 	}
 
 	public ExcursionDTO() {
 	}
-	
+
 	private String getTourGuideName(TourGuide tourGuide) {
 		return tourGuide.getUser().getFirstName() + tourGuide.getUser().getLastName();
 	}
@@ -98,20 +109,12 @@ public class ExcursionDTO {
 		this.tourGuideName = tourGuideName;
 	}
 
-	public LocationDTO getLocationDTO() {
-		return locationDTO;
+	public List<LocationDTO> getLocations() {
+		return locations;
 	}
 
-	public void setLocationDTO(LocationDTO locationDTO) {
-		this.locationDTO = locationDTO;
+	public void setLocations(List<LocationDTO> locations) {
+		this.locations = locations;
 	}
 
-	@Override
-	public String toString() {
-		return "ExcursionDTO [id=" + id + ", date=" + date + ", maxNumberOfPersons=" + maxNumberOfPersons
-				+ ", numberOfPerosns=" + numberOfPerosns + ", price=" + price + ", tourGuideName=" + tourGuideName
-				+ ", locationDTO=" + locationDTO + "]";
-	}
-
-	
 }

@@ -6,14 +6,14 @@ import com.blace.excursion.model.PastExcursionKey;
 public class PastExcursionDTO {
 
 	private PastExcursionKey id;
-	private ExcursionDTO excursionDTO;
+	private ExcursionDTO excursion;
 	private Integer commentsCount;
 	private Integer numberOfPersons;
 	
 	public PastExcursionDTO(PastExcursion pastExcursion) {
 		super();
 		this.id = pastExcursion.getId();
-		this.excursionDTO = new ExcursionDTO(pastExcursion.getExcursion());
+		this.excursion = new ExcursionDTO(pastExcursion.getExcursion());
 		this.commentsCount = pastExcursion.getComments().size();
 		this.numberOfPersons = pastExcursion.getNumberOfPersons();
 	}
@@ -36,12 +36,12 @@ public class PastExcursionDTO {
 		this.id = id;
 	}
 
-	public ExcursionDTO getExcursionDTO() {
-		return excursionDTO;
+	public ExcursionDTO getExcursion() {
+		return excursion;
 	}
 
-	public void setExcursionDTO(ExcursionDTO excursionDTO) {
-		this.excursionDTO = excursionDTO;
+	public void setExcursion(ExcursionDTO excursion) {
+		this.excursion = excursion;
 	}
 
 	public Integer getCommentsCount() {
@@ -54,7 +54,7 @@ public class PastExcursionDTO {
 
 	@Override
 	public String toString() {
-		return "PastExcursionDTO [id=" + id + ", excursionDTO=" + excursionDTO + ", commentsCount=" + commentsCount
+		return "PastExcursionDTO [id=" + id + ", excursionDTO=" + excursion + ", commentsCount=" + commentsCount
 				+ "]";
 	}
 

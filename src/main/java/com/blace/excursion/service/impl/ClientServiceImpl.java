@@ -94,12 +94,12 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	@Override
-	public Boolean cancelReservation(Long excurionId) {
+	public Boolean cancelReservation(Long reservationId) {
 		Client client = clientRepository.getByUserId(getUserId());
 		Iterator<Reservation> it = client.getReservations().iterator();
 		while (it.hasNext()) {
 			Reservation reservation = it.next();
-			if (reservation.getId().getExcursionId() == excurionId)
+			if (reservation.getId() == reservationId)
 			reservation.setCancelled(true);
 		}
 		clientRepository.save(client);
@@ -110,8 +110,7 @@ public class ClientServiceImpl implements ClientService {
 	public void createReservation(ExcursionDTO excursionDTO) {
 		Client client = clientRepository.getOne(getClientId());
 		Excursion excursion = excursionRepository.getOne(excursionDTO.getId());
-		ReservationKey id = new ReservationKey(getClientId(), excursionDTO.getId());
-		Reservation reservation = new Reservation(id, client, excursion, 1);
+		Reservation reservation = new Reservation(client, excursion, 1);
 		reservationRepository.save(reservation);
 	}
 
