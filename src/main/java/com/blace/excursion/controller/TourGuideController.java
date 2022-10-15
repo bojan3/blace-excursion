@@ -1,62 +1,61 @@
 package com.blace.excursion.controller;
 
-import java.util.List;
-
-import com.blace.excursion.dto.Message;
+import com.blace.excursion.dto.*;
+import com.blace.excursion.service.TourGuideService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.blace.excursion.dto.CreateExcursionDTO;
-import com.blace.excursion.dto.ExcursionDTO;
-import com.blace.excursion.dto.PastExcursionDTO;
-import com.blace.excursion.service.TourGuideService;
+import javax.mail.MessagingException;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/tourguide", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TourGuideController {
 
-	private TourGuideService tourGuideService;
+    private TourGuideService tourGuideService;
 
-	@Autowired
-	public TourGuideController(TourGuideService tourGuideService) {
-		this.tourGuideService = tourGuideService;
-	}
+    @Autowired
+    public TourGuideController(TourGuideService tourGuideService) {
+        this.tourGuideService = tourGuideService;
+    }
 
-	@PostMapping("/")
-	public ResponseEntity<Message> createExcursion(@RequestBody CreateExcursionDTO createExcursionDTO) {
-		Message message = tourGuideService.createExcursion(createExcursionDTO);
+    @PostMapping("/")
+    public ResponseEntity<Message> createExcursion(@RequestBody CreateExcursionDTO createExcursionDTO) throws MessagingException {
+        Message message = tourGuideService.createExcursion(createExcursionDTO);
 //		if (created == false) {
 //			return new ResponseEntity<>(created, HttpStatus.BAD_REQUEST);
 //		}
-		return new ResponseEntity<>(message, HttpStatus.OK);
-	}
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
 
-	@GetMapping("/pastExcursions")
-	public ResponseEntity<List<PastExcursionDTO>> getPastExcursions() {
-		List<PastExcursionDTO> pastExcursionDTOs = tourGuideService.getPastExcursions();
-		return new ResponseEntity<>(pastExcursionDTOs, HttpStatus.OK);
-	}
+    @GetMapping("/pastExcursions")
+    public ResponseEntity<List<PastExcursionDTO>> getPastExcursions() {
+        List<PastExcursionDTO> pastExcursionDTOs = tourGuideService.getPastExcursions();
+        return new ResponseEntity<>(pastExcursionDTOs, HttpStatus.OK);
+    }
 
-	@GetMapping("/excursions")
-	public ResponseEntity<List<ExcursionDTO>> getExcursions() {
-		List<ExcursionDTO> excursionDTOs = tourGuideService.getExcursions();
-		return new ResponseEntity<>(excursionDTOs, HttpStatus.OK);
-	}
+    @GetMapping("/excursions")
+    public ResponseEntity<List<ExcursionDTO>> getExcursions() {
+        List<ExcursionDTO> excursionDTOs = tourGuideService.getExcursions();
+        return new ResponseEntity<>(excursionDTOs, HttpStatus.OK);
+    }
 
-	@GetMapping("/cancel/{excursionId}")
-	public ResponseEntity<Boolean> cancelExcursion(@PathVariable Long excursionId) {
-		Boolean cancelled = this.tourGuideService.cancelExcursion(excursionId);
-		return new ResponseEntity<>(cancelled, HttpStatus.OK);
-	}
+    @GetMapping("/cancel/{excursionId}")
+    public ResponseEntity<Boolean> cancelExcursion(@PathVariable Long excursionId) {
+        Boolean cancelled = this.tourGuideService.cancelExcursion(excursionId);
+        return new ResponseEntity<>(cancelled, HttpStatus.OK);
+    }
+
+    @GetMapping("/create/excursion/vehicles/")
+    public ResponseEntity<List<List<VehicleDTO>>> getVehiclesSuggestion(@RequestParam Date date, @RequestParam Integer maxNumberOfPersons) {
+        VehicleFilter vehicleFilter = new VehicleFilter(date, maxNumberOfPersons);
+        System.out.println(date);
+        System.out.println(maxNumberOfPersons);
+        List<List<VehicleDTO>> vehiclesSuggestion = this.tourGuideService.getVehiclesSuggestion(vehicleFilter);
+        return new ResponseEntity<>(vehiclesSuggestion, HttpStatus.OK);
+    }
 }

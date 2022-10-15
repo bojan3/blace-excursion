@@ -1,69 +1,90 @@
 package com.blace.excursion.dto;
 
+import com.blace.excursion.model.Excursion;
+import com.blace.excursion.model.Location;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.blace.excursion.model.Excursion;
-import com.blace.excursion.model.Location;
-
 public class LocationDTO {
 
-	private Long id;
-	private String name;
-	private String description;
-	private Boolean canDelete;
+    private Long id;
+    private String name;
+    private String description;
+    private Boolean canDelete;
 
-	public LocationDTO(Location location) {
-		super();
-		this.id = location.getId();
-		this.name = location.getName();
-		this.description = location.getDescription();
-		this.canDelete = checkCanDelete(location.getExcursions());
-	}
+    private Integer ticketPrice;
 
-	private Boolean checkCanDelete(Set<Excursion> excursions) {
-		Iterator<Excursion> it = excursions.iterator();
-		while (it.hasNext()) {
-			if (it.next().getDate().before(new Date()))
-				return false;
-		}
-		return true;
-	}
+    public LocationDTO(Location location) {
+        super();
+        this.id = location.getId();
+        this.name = location.getName();
+        this.description = location.getDescription();
+        this.canDelete = checkCanDelete(location.getExcursions());
+        this.ticketPrice = location.getTicketPrice();
+    }
 
-	public LocationDTO() {
-	}
+    private Boolean checkCanDelete(Set<Excursion> excursions) {
+        Iterator<Excursion> it = excursions.iterator();
+        while (it.hasNext()) {
+            if (it.next().getDate().before(new Date()))
+                return false;
+        }
+        return true;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public LocationDTO() {
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public Boolean getCanDelete() {
-		return canDelete;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setCanDelete(Boolean canDelete) {
-		this.canDelete = canDelete;
-	}
+    public Boolean getCanDelete() {
+        return canDelete;
+    }
 
+    public void setCanDelete(Boolean canDelete) {
+        this.canDelete = canDelete;
+    }
+
+    public Integer getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(Integer ticketPrice) {
+        this.ticketPrice = ticketPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "LocationDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", canDelete=" + canDelete +
+                ", ticketPrice=" + ticketPrice +
+                '}';
+    }
 }

@@ -10,14 +10,14 @@ import javax.persistence.*;
 //@Table(name="ROLE")
 public class Role implements GrantedAuthority {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-    @Column(name="id")
+    @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name="name")
+    @Column(name = "name")
     String name;
 
     @JsonIgnore
@@ -25,7 +25,7 @@ public class Role implements GrantedAuthority {
     public String getAuthority() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }

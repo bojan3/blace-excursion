@@ -1,158 +1,182 @@
 package com.blace.excursion.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Excursion {
 
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	@JsonFormat(pattern = "dd.MM.yyyy.")
-	@Column
-	private Date date;
-	@Column
-	private Boolean cancelled;
-	@Column
-	private Integer maxNumberOfPersons;
-	@Column
-	private Integer price;
-	@OneToMany(mappedBy = "excursion")
-	private Set<Reservation> reservations;
-	@OneToMany(mappedBy = "excursion")
-	private Set<PastExcursion> pastExcursions;
-	@ManyToOne
-	private TourGuide tourGuide;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @JsonFormat(pattern = "dd.MM.yyyy.")
+    @Column
+    private Date date;
+    @Column
+    private Boolean cancelled;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "excursion_locations", joinColumns = @JoinColumn(name = "excursion_id"), inverseJoinColumns = @JoinColumn(name = "location_id"))
-	private Set<Location> locations;
-	@ManyToOne
-	private Vehicle vehicle;
+    @Column
+    private Integer minNumberOfPersons;
+    @Column
+    private Integer maxNumberOfPersons;
+    @Column
+    private Integer price;
+    @OneToMany(mappedBy = "excursion")
+    private Set<Reservation> reservations;
+    @OneToMany(mappedBy = "excursion")
+    private Set<PastExcursion> pastExcursions;
+    @ManyToOne
+    private TourGuide tourGuide;
 
-	public Excursion() {
-		super();
-	}
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "excursion_locations", joinColumns = @JoinColumn(name = "excursion_id"), inverseJoinColumns = @JoinColumn(name = "location_id"))
+    private Set<Location> locations;
 
-	public Excursion(Date date, Boolean cancelled, Integer maxNumberOfPersons, Integer price, TourGuide tourGuide,
-			Set<Location> locations, Vehicle vehicle) {
-		super();
-		this.date = date;
-		this.cancelled = cancelled;
-		this.maxNumberOfPersons = maxNumberOfPersons;
-		this.price = price;
-		this.tourGuide = tourGuide;
-		this.locations = locations;
-		this.vehicle = vehicle;
-	}
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "excursion_vehicles", joinColumns = @JoinColumn(name = "excursion_id"), inverseJoinColumns = @JoinColumn(name = "vehicle_id"))
+    private Set<Vehicle> vehicles;
 
-	public Set<Reservation> getReservations() {
-		return reservations;
-	}
+    private Boolean approved;
 
-	public void setReservations(Set<Reservation> reservations) {
-		this.reservations = reservations;
-	}
+    @OneToMany(mappedBy = "excursion", fetch = FetchType.EAGER)
+    private Set<LocationApproveToken> LocationApproveTokens;
 
-	public Set<PastExcursion> getPastExcursions() {
-		return pastExcursions;
-	}
+    public Excursion() {
+        super();
+    }
 
-	public void setPastExcursions(Set<PastExcursion> pastExcursions) {
-		this.pastExcursions = pastExcursions;
-	}
+    public Excursion(Date date, Boolean cancelled, Integer minNumberOfPersons, Integer maxNumberOfPersons, Integer price, TourGuide tourGuide,
+                     Set<Location> locations, Set<Vehicle> vehicles) {
+        super();
+        this.date = date;
+        this.cancelled = cancelled;
+        this.minNumberOfPersons = minNumberOfPersons;
+        this.maxNumberOfPersons = maxNumberOfPersons;
+        this.price = price;
+        this.tourGuide = tourGuide;
+        this.locations = locations;
+        this.vehicles = vehicles;
+        this.approved = false;
+    }
 
-	public TourGuide getTourGuide() {
-		return tourGuide;
-	}
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
 
-	public void setTourGuide(TourGuide tourGuide) {
-		this.tourGuide = tourGuide;
-	}
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 
-	public Set<Location> getLocations() {
-		return locations;
-	}
+    public Set<PastExcursion> getPastExcursions() {
+        return pastExcursions;
+    }
 
-	public void setLocations(Set<Location> locations) {
-		this.locations = locations;
-	}
+    public void setPastExcursions(Set<PastExcursion> pastExcursions) {
+        this.pastExcursions = pastExcursions;
+    }
 
-	public Vehicle getVehicle() {
-		return vehicle;
-	}
+    public TourGuide getTourGuide() {
+        return tourGuide;
+    }
 
-	public void setVehicle(Vehicle vehicle) {
-		this.vehicle = vehicle;
-	}
+    public void setTourGuide(TourGuide tourGuide) {
+        this.tourGuide = tourGuide;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Set<Location> getLocations() {
+        return locations;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setLocations(Set<Location> locations) {
+        this.locations = locations;
+    }
 
-	public Date getDate() {
-		return date;
-	}
+    public Set<Vehicle> getVehicles() {
+        return vehicles;
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public void setVehicles(Set<Vehicle> vehicles) {
+        this.vehicles = vehicles;
+    }
 
-	public Boolean getCancelled() {
-		return cancelled;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setCancelled(Boolean cancelled) {
-		this.cancelled = cancelled;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Integer getMaxNumberOfPersons() {
-		return maxNumberOfPersons;
-	}
+    public Date getDate() {
+        return date;
+    }
 
-	public void setMaxNumberOfPersons(Integer maxNumberOfPersons) {
-		this.maxNumberOfPersons = maxNumberOfPersons;
-	}
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-	public Integer getPrice() {
-		return price;
-	}
+    public Boolean getCancelled() {
+        return cancelled;
+    }
 
-	public void setPrice(Integer price) {
-		this.price = price;
-	}
+    public void setCancelled(Boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 
-	public Boolean notPass() {
-		return this.date.after(new Date());
-	}
+    public Integer getMaxNumberOfPersons() {
+        return maxNumberOfPersons;
+    }
 
-	@Override
-	public String toString() {
-		return "Excursion [id=" + id + ", date=" + date + ", cancelled=" + cancelled + ", maxNumberOfPersons="
-				+ maxNumberOfPersons + ", price=" + price + ", reservations=" + reservations + ", pastExcursions="
-				+ pastExcursions + ", tourGuide=" + tourGuide + ", locations=" + locations + ", vehicle=" + vehicle
-				+ "]";
-	}
+    public void setMaxNumberOfPersons(Integer maxNumberOfPersons) {
+        this.maxNumberOfPersons = maxNumberOfPersons;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public Boolean notPass() {
+        return this.date.after(new Date());
+    }
+
+    public Boolean getApproved() {
+        return approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    public Integer getMinNumberOfPersons() {
+        return minNumberOfPersons;
+    }
+
+    public void setMinNumberOfPersons(Integer minNumberOfPersons) {
+        this.minNumberOfPersons = minNumberOfPersons;
+    }
+
+    public Set<LocationApproveToken> getLocationApproveTokens() {
+        return LocationApproveTokens;
+    }
+
+    public void setLocationApproveTokens(Set<LocationApproveToken> locationApproveTokens) {
+        LocationApproveTokens = locationApproveTokens;
+    }
+
+    @Override
+    public String toString() {
+        return "Excursion [id=" + id + ", date=" + date + ", cancelled=" + cancelled + ", maxNumberOfPersons="
+                + maxNumberOfPersons + ", price=" + price + ", reservations=" + reservations + ", pastExcursions="
+                + pastExcursions + ", tourGuide=" + tourGuide + ", locations=" + locations + ", vehicles=" + vehicles
+                + "]";
+    }
 
 }

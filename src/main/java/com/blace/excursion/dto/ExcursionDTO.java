@@ -1,120 +1,116 @@
 package com.blace.excursion.dto;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import com.blace.excursion.model.Excursion;
 import com.blace.excursion.model.Location;
 import com.blace.excursion.model.Reservation;
 import com.blace.excursion.model.TourGuide;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.util.*;
+
 public class ExcursionDTO {
-	private Long id;
-	@JsonFormat(pattern = "dd.MM.yyyy.")
-	private Date date;
-	private Integer maxNumberOfPersons;
-	private Integer numberOfPerosns;
-	private Integer price;
-	private String tourGuideName;
-	private List<LocationDTO> locations;
+    private Long id;
+    @JsonFormat(pattern = "dd.MM.yyyy.")
+    private Date date;
+    private Integer maxNumberOfPersons;
+    private Integer numberOfPerosns;
+    private Integer price;
+    private String tourGuideName;
+    private List<LocationDTO> locations;
 
-	public ExcursionDTO(Excursion excursion) {
-		super();
-		this.id = excursion.getId();
-		this.date = excursion.getDate();
-		this.maxNumberOfPersons = excursion.getMaxNumberOfPersons();
-		this.numberOfPerosns = calculateNumberOfPersons(excursion);
-		this.price = excursion.getPrice();
-		this.tourGuideName = getTourGuideName(excursion.getTourGuide());
-		this.locations = locationsToDTO(excursion.getLocations());
-	}
+    public ExcursionDTO(Excursion excursion) {
+        super();
+        this.id = excursion.getId();
+        this.date = excursion.getDate();
+        this.maxNumberOfPersons = excursion.getMaxNumberOfPersons();
+        this.numberOfPerosns = calculateNumberOfPersons(excursion);
+        this.price = excursion.getPrice();
+        this.tourGuideName = getTourGuideName(excursion.getTourGuide());
+        this.locations = locationsToDTO(excursion.getLocations());
+    }
 
-	private List<LocationDTO> locationsToDTO(Set<Location> locations) {
-		List<LocationDTO> locationDTOs = new ArrayList<>();
-		Iterator<Location> it = locations.iterator();
-		while (it.hasNext())
-			locationDTOs.add(new LocationDTO(it.next()));
-		return locationDTOs;
-	}
+    private List<LocationDTO> locationsToDTO(Set<Location> locations) {
+        List<LocationDTO> locationDTOs = new ArrayList<>();
+        Iterator<Location> it = locations.iterator();
+        while (it.hasNext())
+            locationDTOs.add(new LocationDTO(it.next()));
+        return locationDTOs;
+    }
 
-	public ExcursionDTO() {
-	}
+    public ExcursionDTO() {
+    }
 
-	private String getTourGuideName(TourGuide tourGuide) {
-		return tourGuide.getUser().getFirstName() + tourGuide.getUser().getLastName();
-	}
+    private String getTourGuideName(TourGuide tourGuide) {
+        return tourGuide.getUser().getFirstName() + tourGuide.getUser().getLastName();
+    }
 
-	private Integer calculateNumberOfPersons(Excursion excursion) {
-		Integer numberOfPersons = 0;
+    private Integer calculateNumberOfPersons(Excursion excursion) {
+        Integer numberOfPersons = 0;
 
-		Set<Reservation> reservations = excursion.getReservations();
+        Set<Reservation> reservations = excursion.getReservations();
 
-		Iterator<Reservation> it = reservations.iterator();
-		while (it.hasNext()) {
-			numberOfPersons += it.next().getNumberOfPersons();
-		}
+        Iterator<Reservation> it = reservations.iterator();
+        while (it.hasNext()) {
+            numberOfPersons += it.next().getNumberOfPersons();
+        }
 
-		return numberOfPersons;
-	}
+        return numberOfPersons;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Date getDate() {
-		return date;
-	}
+    public Date getDate() {
+        return date;
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-	public Integer getMaxNumberOfPersons() {
-		return maxNumberOfPersons;
-	}
+    public Integer getMaxNumberOfPersons() {
+        return maxNumberOfPersons;
+    }
 
-	public void setMaxNumberOfPersons(Integer maxNumberOfPersons) {
-		this.maxNumberOfPersons = maxNumberOfPersons;
-	}
+    public void setMaxNumberOfPersons(Integer maxNumberOfPersons) {
+        this.maxNumberOfPersons = maxNumberOfPersons;
+    }
 
-	public Integer getNumberOfPerosns() {
-		return numberOfPerosns;
-	}
+    public Integer getNumberOfPerosns() {
+        return numberOfPerosns;
+    }
 
-	public void setNumberOfPerosns(Integer numberOfPerosns) {
-		this.numberOfPerosns = numberOfPerosns;
-	}
+    public void setNumberOfPerosns(Integer numberOfPerosns) {
+        this.numberOfPerosns = numberOfPerosns;
+    }
 
-	public Integer getPrice() {
-		return price;
-	}
+    public Integer getPrice() {
+        return price;
+    }
 
-	public void setPrice(Integer price) {
-		this.price = price;
-	}
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
 
-	public String getTourGuideName() {
-		return tourGuideName;
-	}
+    public String getTourGuideName() {
+        return tourGuideName;
+    }
 
-	public void setTourGuideName(String tourGuideName) {
-		this.tourGuideName = tourGuideName;
-	}
+    public void setTourGuideName(String tourGuideName) {
+        this.tourGuideName = tourGuideName;
+    }
 
-	public List<LocationDTO> getLocations() {
-		return locations;
-	}
+    public List<LocationDTO> getLocations() {
+        return locations;
+    }
 
-	public void setLocations(List<LocationDTO> locations) {
-		this.locations = locations;
-	}
+    public void setLocations(List<LocationDTO> locations) {
+        this.locations = locations;
+    }
 
 }

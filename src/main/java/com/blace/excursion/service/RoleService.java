@@ -1,10 +1,11 @@
 package com.blace.excursion.service;
 
-import java.util.List;
-
 import com.blace.excursion.model.Role;
 
+import java.util.List;
+
 public interface RoleService {
-	Role findById(Long id);
-	List<Role> findByName(String name);
+    Role findById(Long id);
+
+    List<Role> findByName(String name);
 }

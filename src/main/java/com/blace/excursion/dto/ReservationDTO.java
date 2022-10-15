@@ -29,5 +29,5 @@ public class ReservationDTO {
     public void setExcursion(ExcursionDTO excursion) {
         this.excursion = excursion;
     }
-    
+
 }

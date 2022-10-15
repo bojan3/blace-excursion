@@ -1,88 +1,101 @@
 package com.blace.excursion.model;
 
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
 import com.blace.excursion.dto.CreateVehicleDTO;
+
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Vehicle {
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	@Column
-	private String name;
-	@Column
-	private Integer maxNumberOfPersons;
-	@Column
-	private Boolean deleted;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column
+    private String name;
+    @Column
+    private Integer maxNumberOfPersons;
+    @Column
+    private Boolean deleted;
 
-	@OneToMany(mappedBy = "vehicle")
-	private Set<Excursion> excursions;
+    @ManyToMany(mappedBy = "vehicles")
+    private Set<Excursion> excursions;
 
-	public Vehicle() {
-		super();
-	}
+    private Integer pricePerDay;
 
-	public Vehicle(String name, Integer maxNumberOfPersons, Set<Excursion> excursions) {
-		super();
-		this.name = name;
-		this.maxNumberOfPersons = maxNumberOfPersons;
-		this.excursions = excursions;
-		this.deleted = false;
-	}
+    public Vehicle() {
+        super();
+    }
 
-	public Vehicle(CreateVehicleDTO createVehicleDTO) {
-		this.name = createVehicleDTO.getName();
-		this.maxNumberOfPersons = createVehicleDTO.getMaxNumberOfPersons();
-		this.deleted = false;
-	}
+    public Vehicle(String name, Integer maxNumberOfPersons, Set<Excursion> excursions, Integer pricePerDay) {
+        super();
+        this.name = name;
+        this.maxNumberOfPersons = maxNumberOfPersons;
+        this.excursions = excursions;
+        this.deleted = false;
+        this.pricePerDay = pricePerDay;
+    }
 
-	public Set<Excursion> getExcursions() {
-		return excursions;
-	}
+    public Vehicle(CreateVehicleDTO createVehicleDTO) {
+        this.name = createVehicleDTO.getName();
+        this.maxNumberOfPersons = createVehicleDTO.getMaxNumberOfPersons();
+        this.deleted = false;
+        //TODO: prive per day add when you create the vehicle
+    }
 
-	public void setExcursions(Set<Excursion> excursions) {
-		this.excursions = excursions;
-	}
+    public Set<Excursion> getExcursions() {
+        return excursions;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public void setExcursions(Set<Excursion> excursions) {
+        this.excursions = excursions;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Integer getMaxNumberOfPersons() {
-		return maxNumberOfPersons;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setMaxNumberOfPersons(Integer maxNumberOfPersons) {
-		this.maxNumberOfPersons = maxNumberOfPersons;
-	}
+    public Integer getMaxNumberOfPersons() {
+        return maxNumberOfPersons;
+    }
 
-	public Boolean getDeleted() {
-		return deleted;
-	}
+    public void setMaxNumberOfPersons(Integer maxNumberOfPersons) {
+        this.maxNumberOfPersons = maxNumberOfPersons;
+    }
 
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
-	}
+    public Boolean getDeleted() {
+        return deleted;
+    }
 
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public Integer getPricePerDay() {
+        return pricePerDay;
+    }
+
+    public void setPricePerDay(Integer pricePerDay) {
+        this.pricePerDay = pricePerDay;
+    }
+
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "name='" + name + '\'' +
+                ", maxNumberOfPersons=" + maxNumberOfPersons +
+                '}';
+    }
 }

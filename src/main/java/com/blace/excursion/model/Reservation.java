@@ -2,8 +2,6 @@ package com.blace.excursion.model;
 
 import javax.persistence.*;
 
-import org.springframework.util.backoff.BackOff;
-
 @Entity
 public class Reservation {
 

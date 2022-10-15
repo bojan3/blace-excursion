@@ -1,20 +1,19 @@
 package com.blace.excursion.service;
 
-import java.util.List;
+import com.blace.excursion.dto.*;
 
-import com.blace.excursion.dto.CreateExcursionDTO;
-import com.blace.excursion.dto.ExcursionDTO;
-import com.blace.excursion.dto.Message;
-import com.blace.excursion.dto.PastExcursionDTO;
+import javax.mail.MessagingException;
+import java.util.List;
 
 public interface TourGuideService {
 
-	Message createExcursion(CreateExcursionDTO createExcursionDTO);
+    Message createExcursion(CreateExcursionDTO createExcursionDTO) throws MessagingException;
 
-	List<PastExcursionDTO> getPastExcursions();
+    List<PastExcursionDTO> getPastExcursions();
 
-	List<ExcursionDTO> getExcursions();
+    List<ExcursionDTO> getExcursions();
 
-	Boolean cancelExcursion(Long excursionId);
+    Boolean cancelExcursion(Long excursionId);
 
+    List<List<VehicleDTO>> getVehiclesSuggestion(VehicleFilter vehicleFilter);
 }
