@@ -45,6 +45,25 @@ public class Excursion {
     @OneToMany(mappedBy = "excursion", fetch = FetchType.EAGER)
     private Set<LocationApproveToken> LocationApproveTokens;
 
+    @Column
+    private Integer reservatedTicketsNum;
+
+    @Version
+    @Column(columnDefinition = "integer DEFAULT 0", nullable = false)
+    private Integer version;
+
+    @ManyToOne
+    @JoinColumn(name = "meal_id")
+    private Meal meal;
+
+    public Meal getMeal() {
+        return meal;
+    }
+
+    public void setMeal(Meal meal) {
+        this.meal = meal;
+    }
+
     public Excursion() {
         super();
     }
@@ -61,6 +80,7 @@ public class Excursion {
         this.locations = locations;
         this.vehicles = vehicles;
         this.approved = false;
+        this.reservatedTicketsNum = 0;
     }
 
     public Set<Reservation> getReservations() {
@@ -169,6 +189,22 @@ public class Excursion {
 
     public void setLocationApproveTokens(Set<LocationApproveToken> locationApproveTokens) {
         LocationApproveTokens = locationApproveTokens;
+    }
+
+    public Integer getReservatedTicketsNum() {
+        return reservatedTicketsNum;
+    }
+
+    public void setReservatedTicketsNum(Integer reservatedTicketsNum) {
+        this.reservatedTicketsNum = reservatedTicketsNum;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override

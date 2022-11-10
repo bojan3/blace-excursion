@@ -39,8 +39,8 @@ public class TourGuideController {
     }
 
     @GetMapping("/excursions")
-    public ResponseEntity<List<ExcursionDTO>> getExcursions() {
-        List<ExcursionDTO> excursionDTOs = tourGuideService.getExcursions();
+    public ResponseEntity<List<TourguideExcursionDTO>> getExcursions() {
+        List<TourguideExcursionDTO> excursionDTOs = tourGuideService.getExcursions();
         return new ResponseEntity<>(excursionDTOs, HttpStatus.OK);
     }
 
@@ -53,9 +53,15 @@ public class TourGuideController {
     @GetMapping("/create/excursion/vehicles/")
     public ResponseEntity<List<List<VehicleDTO>>> getVehiclesSuggestion(@RequestParam Date date, @RequestParam Integer maxNumberOfPersons) {
         VehicleFilter vehicleFilter = new VehicleFilter(date, maxNumberOfPersons);
-        System.out.println(date);
-        System.out.println(maxNumberOfPersons);
         List<List<VehicleDTO>> vehiclesSuggestion = this.tourGuideService.getVehiclesSuggestion(vehicleFilter);
         return new ResponseEntity<>(vehiclesSuggestion, HttpStatus.OK);
+    }
+
+    @GetMapping("/restaurants")
+    public ResponseEntity<List<RestaurantDTO>> getRestaurants() {
+
+        List<RestaurantDTO> restaurants = this.tourGuideService.getRestaurants();
+
+        return new ResponseEntity<>(restaurants, HttpStatus.OK);
     }
 }

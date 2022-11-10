@@ -39,7 +39,7 @@ public class ExcursionServiceImpl implements ExcursionService {
 
     @Override
     public List<ExcursionDTO> getExcursions() {
-        List<Excursion> excursions = excursionRepository.findAllNotPass();
+        List<Excursion> excursions = excursionRepository.findAllNotPassApproved();
         return excursionsToDTO(excursions);
     }
 
@@ -134,10 +134,11 @@ public class ExcursionServiceImpl implements ExcursionService {
         LocationApproveToken LAToken = this.locationApproveTokenRepository.getByToken(token);
         LAToken.setApproved(true);
         this.locationApproveTokenRepository.save(LAToken);
-
+        System.out.println("ID tokena je" + LAToken.getId());
         Excursion excursion = LAToken.getExcursion();
 
         if (allApproved(excursion)) {
+//        if (allApproved(excursion)) {
             excursion.setApproved(true);
             this.excursionRepository.save(excursion);
             //TODO: send tourguide mail that excrusion is approved

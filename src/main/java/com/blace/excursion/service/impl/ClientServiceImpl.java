@@ -1,6 +1,6 @@
 package com.blace.excursion.service.impl;
 
-import com.blace.excursion.dto.ExcursionDTO;
+import com.blace.excursion.dto.CreateReservationDTO;
 import com.blace.excursion.dto.PastExcursionDTO;
 import com.blace.excursion.dto.ReservationDTO;
 import com.blace.excursion.model.*;
@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -43,11 +40,14 @@ public class ClientServiceImpl implements ClientService {
 
     private Set<Reservation> getNotCancelledReservations(Set<Reservation> reservations) {
         Iterator<Reservation> it = reservations.iterator();
+
         while (it.hasNext()) {
             Reservation reservation = it.next();
-            if (reservation.getCancelled()) {
+            java.sql.Date date = new java.sql.Date(reservation.getExcursion().getDate().getTime());
+            if (reservation.getCancelled() || date.before(new java.sql.Date(Calendar.getInstance().getTime().getTime()))) {
                 reservations.remove(reservation);
             }
+
         }
         return reservations;
     }
@@ -63,6 +63,10 @@ public class ClientServiceImpl implements ClientService {
         return client.getId();
     }
 
+    private Client getClient() {
+        return clientRepository.getByUserId(getUserId());
+    }
+
     private List<ReservationDTO> reservationsToDTO(Set<Reservation> reservations) {
         Iterator<Reservation> it = reservations.iterator();
         List<ReservationDTO> reservationDTOs = new ArrayList<ReservationDTO>();
@@ -73,9 +77,19 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<PastExcursionDTO> getPastExcursions() {
-        Set<PastExcursion> pastExcursions = clientRepository.getOne(getClientId()).getPastExcursions();
-        return pastExcursionToDTO(pastExcursions);
+    public List<ReservationDTO> getPastReservations() {
+        Set<Reservation> reservations = clientRepository.getOne(getClientId()).getReservations();
+        Set<Reservation> pastReservations = new HashSet<Reservation>();
+
+        for (Reservation reservation : reservations) {
+
+            java.sql.Date date = new java.sql.Date(reservation.getExcursion().getDate().getTime());
+            if (date.before(new java.sql.Date(Calendar.getInstance().getTime().getTime()))) {
+                pastReservations.add(reservation);
+            }
+        }
+
+        return reservationsToDTO(pastReservations);
     }
 
     private List<PastExcursionDTO> pastExcursionToDTO(Set<PastExcursion> pastExcursions) {
@@ -100,12 +114,17 @@ public class ClientServiceImpl implements ClientService {
         return true;
     }
 
-    @Override
-    public void createReservation(ExcursionDTO excursionDTO) {
-        Client client = clientRepository.getOne(getClientId());
-        Excursion excursion = excursionRepository.getOne(excursionDTO.getId());
-        Reservation reservation = new Reservation(client, excursion, 1);
+    public void createReservation(CreateReservationDTO createReservationDTO) {
+        Client client = getClient();
+        Excursion excursion = excursionRepository.getOne(createReservationDTO.getExcursionId());
+        Reservation reservation = new Reservation(client, excursion, createReservationDTO.getNumOfPersons());
+        System.out.println(reservation.getClient().getId());
         reservationRepository.save(reservation);
+    }
+
+    @Override
+    public void createNewClient(Client client) {
+        this.clientRepository.save(client);
     }
 
 }

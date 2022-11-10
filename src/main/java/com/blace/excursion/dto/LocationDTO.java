@@ -13,8 +13,9 @@ public class LocationDTO {
     private String name;
     private String description;
     private Boolean canDelete;
-
     private Integer ticketPrice;
+
+    private String imgLink;
 
     public LocationDTO(Location location) {
         super();
@@ -23,6 +24,7 @@ public class LocationDTO {
         this.description = location.getDescription();
         this.canDelete = checkCanDelete(location.getExcursions());
         this.ticketPrice = location.getTicketPrice();
+        this.imgLink = location.getImgLink();
     }
 
     private Boolean checkCanDelete(Set<Excursion> excursions) {
@@ -75,6 +77,10 @@ public class LocationDTO {
 
     public void setTicketPrice(Integer ticketPrice) {
         this.ticketPrice = ticketPrice;
+    }
+
+    public String getImgLink() {
+        return imgLink;
     }
 
     @Override

@@ -16,19 +16,28 @@ public class Meal {
 
     private Integer price;
 
-    private Boolean deleted;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
 
     public Meal() {
         super();
     }
 
-    public Meal(Long id, String name, String description, Integer price, Boolean deleted) {
+    public Meal(Long id, String name, String description, Integer price) {
         super();
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.deleted = deleted;
     }
 
     public Long getId() {
@@ -62,13 +71,6 @@ public class Meal {
     public void setPrice(Integer price) {
         this.price = price;
     }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
+    
 
 }

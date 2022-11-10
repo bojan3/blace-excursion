@@ -1,10 +1,7 @@
 package com.blace.excursion.dto;
 
-import com.blace.excursion.model.Client;
 import com.blace.excursion.model.Comment;
 import com.blace.excursion.model.User;
-
-import java.util.Iterator;
 
 public class CommentDTO {
 
@@ -21,26 +18,26 @@ public class CommentDTO {
         this.clientName = getClientName(comment);
         this.text = comment.getText();
         this.rate = comment.getRate();
-        this.likeCount = countLikes(comment);
-        this.iLiked = isILiked(comment, accountId);
+//        this.likeCount = countLikes(comment);
+//        this.iLiked = isILiked(comment, accountId);
     }
 
-    private Integer countLikes(Comment comment) {
-        return comment.getClients().size();
-    }
+//    private Integer countLikes(Comment comment) {
+//        return comment.getClients().size();
+//    }
 
     private String getClientName(Comment comment) {
         User user = comment.getPastExcursion().getClient().getUser();
         return user.getLastName() + " " + user.getFirstName();
     }
 
-    private Boolean isILiked(Comment comment, Long accountId) {
-        Iterator<Client> it = comment.getClients().iterator();
-        while (it.hasNext())
-            if (it.next().getId() == accountId)
-                return true;
-        return false;
-    }
+//    private Boolean isILiked(Comment comment, Long accountId) {
+//        Iterator<Client> it = comment.getClients().iterator();
+//        while (it.hasNext())
+//            if (it.next().getId() == accountId)
+//                return true;
+//        return false;
+//    }
 
     public Long getId() {
         return id;

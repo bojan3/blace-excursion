@@ -29,6 +29,8 @@ public class Location {
     @Column
     private Integer ticketPrice;
 
+    private String imgLink;
+
     public Location() {
         super();
     }
@@ -111,5 +113,13 @@ public class Location {
 
     public void setTicketPrice(Integer ticketPrice) {
         this.ticketPrice = ticketPrice;
+    }
+
+    public String getImgLink() {
+        return imgLink;
+    }
+
+    public void setImgLink(String imgLink) {
+        this.imgLink = imgLink;
     }
 }

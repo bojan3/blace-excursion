@@ -12,6 +12,10 @@ public class CreateExcursionDTO {
 
     private Integer minNumberOfPersons;
 
+    private Long mealId;
+
+    private List<Long> vehicleIds;
+
     public CreateExcursionDTO() {
     }
 
@@ -59,5 +63,21 @@ public class CreateExcursionDTO {
 
     public void setMinNumberOfPersons(Integer minNumberOfPersons) {
         this.minNumberOfPersons = minNumberOfPersons;
+    }
+
+    public Long getMealId() {
+        return mealId;
+    }
+
+    public void setMealId(Long mealId) {
+        this.mealId = mealId;
+    }
+
+    public List<Long> getVehicleIds() {
+        return vehicleIds;
+    }
+
+    public void setVehicleIds(List<Long> vehicleIds) {
+        this.vehicleIds = vehicleIds;
     }
 }

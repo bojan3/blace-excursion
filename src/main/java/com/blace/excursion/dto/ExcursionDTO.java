@@ -18,6 +18,10 @@ public class ExcursionDTO {
     private String tourGuideName;
     private List<LocationDTO> locations;
 
+    private String mealName;
+
+    private String restaurantName;
+
     public ExcursionDTO(Excursion excursion) {
         super();
         this.id = excursion.getId();
@@ -27,6 +31,8 @@ public class ExcursionDTO {
         this.price = excursion.getPrice();
         this.tourGuideName = getTourGuideName(excursion.getTourGuide());
         this.locations = locationsToDTO(excursion.getLocations());
+        this.mealName = excursion.getMeal().getName();
+        this.restaurantName = excursion.getMeal().getRestaurant().getName();
     }
 
     private List<LocationDTO> locationsToDTO(Set<Location> locations) {
@@ -41,7 +47,7 @@ public class ExcursionDTO {
     }
 
     private String getTourGuideName(TourGuide tourGuide) {
-        return tourGuide.getUser().getFirstName() + tourGuide.getUser().getLastName();
+        return tourGuide.getUser().getFirstName() + " " + tourGuide.getUser().getLastName();
     }
 
     private Integer calculateNumberOfPersons(Excursion excursion) {

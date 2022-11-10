@@ -1,20 +1,21 @@
 package com.blace.excursion.service;
 
-import java.util.List;
-
-import com.blace.excursion.dto.ExcursionDTO;
-import com.blace.excursion.dto.PastExcursionDTO;
+import com.blace.excursion.dto.CreateReservationDTO;
 import com.blace.excursion.dto.ReservationDTO;
+import com.blace.excursion.model.Client;
+
+import java.util.List;
 
 
 public interface ClientService {
 
-	List<ReservationDTO> getReservations();
+    List<ReservationDTO> getReservations();
 
-	List<PastExcursionDTO> getPastExcursions();
+    List<ReservationDTO> getPastReservations();
 
-	Boolean cancelReservation(Long excursionId);
+    Boolean cancelReservation(Long excursionId);
 
-	void createReservation(ExcursionDTO excursionDTO);
+    void createReservation(CreateReservationDTO createReservationDTO);
 
+    void createNewClient(Client client);
 }

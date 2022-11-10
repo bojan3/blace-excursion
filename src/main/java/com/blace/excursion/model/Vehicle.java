@@ -23,6 +23,10 @@ public class Vehicle {
 
     private Integer pricePerDay;
 
+    @Version
+    @Column(columnDefinition = "integer DEFAULT 0", nullable = false)
+    private Integer version;
+
     public Vehicle() {
         super();
     }

@@ -1,7 +1,5 @@
 package com.blace.excursion.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.Set;
 
@@ -16,9 +14,9 @@ public class Comment {
     private String text;
     @Column
     private Integer rate;
-    @JsonIgnore
-    @ManyToMany(mappedBy = "likedComments")
-    private Set<Client> clients;
+    //    @JsonIgnore
+//    @ManyToMany(mappedBy = "likedComments")
+//    private Set<Client> clients;
     @ManyToOne
     private PastExcursion pastExcursion;
 
@@ -26,7 +24,6 @@ public class Comment {
         super();
         this.text = text;
         this.rate = rate;
-        this.clients = clients;
     }
 
     public Comment() {
@@ -57,13 +54,6 @@ public class Comment {
         this.rate = rate;
     }
 
-    public Set<Client> getClients() {
-        return clients;
-    }
-
-    public void setClients(Set<Client> clients) {
-        this.clients = clients;
-    }
 
     public PastExcursion getPastExcursion() {
         return pastExcursion;
@@ -73,9 +63,5 @@ public class Comment {
         this.pastExcursion = pastExcursion;
     }
 
-    @Override
-    public String toString() {
-        return "Comment [id=" + id + ", text=" + text + ", rate=" + rate + ", clients=" + clients + "]";
-    }
 
 }

@@ -11,9 +11,11 @@ public interface TourGuideService {
 
     List<PastExcursionDTO> getPastExcursions();
 
-    List<ExcursionDTO> getExcursions();
+    List<TourguideExcursionDTO> getExcursions();
 
     Boolean cancelExcursion(Long excursionId);
 
     List<List<VehicleDTO>> getVehiclesSuggestion(VehicleFilter vehicleFilter);
+
+    List<RestaurantDTO> getRestaurants();
 }

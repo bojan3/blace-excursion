@@ -3,15 +3,17 @@ package com.blace.excursion.dto;
 import com.blace.excursion.model.Reservation;
 
 public class ReservationDTO {
-
-    //	private ReservationKey id;
     private Long id;
     private ExcursionDTO excursion;
+
+    private Integer numberOfPersons;
 
     public ReservationDTO(Reservation reservation) {
         super();
         this.id = reservation.getId();
         this.excursion = new ExcursionDTO(reservation.getExcursion());
+        this.numberOfPersons = reservation.getNumberOfPersons();
+
     }
 
     public Long getId() {
@@ -30,4 +32,7 @@ public class ReservationDTO {
         this.excursion = excursion;
     }
 
+    public Integer getNumberOfPersons() {
+        return numberOfPersons;
+    }
 }

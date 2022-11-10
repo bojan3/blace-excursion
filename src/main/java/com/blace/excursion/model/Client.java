@@ -10,23 +10,19 @@ public class Client {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private Set<Reservation> reservations;
     @OneToMany(mappedBy = "client")
     private Set<PastExcursion> pastExcursions;
-    @ManyToMany
-    @JoinTable(name = "liked_commnets", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    private Set<Comment> likedComments;
+//    @ManyToMany
+//    @JoinTable(name = "liked_commnets", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "comment_id"))
+//    private Set<Comment> likedComments;
 
-    public Client(User user, Set<Reservation> reservations, Set<PastExcursion> pastExcursions,
-                  Set<Comment> likedComments) {
+    public Client(User user) {
         super();
         this.user = user;
-        this.reservations = reservations;
-        this.pastExcursions = pastExcursions;
-        this.likedComments = likedComments;
     }
 
     public Client() {
@@ -63,20 +59,6 @@ public class Client {
 
     public void setPastExcursions(Set<PastExcursion> pastExcursions) {
         this.pastExcursions = pastExcursions;
-    }
-
-    public Set<Comment> getLikedComments() {
-        return likedComments;
-    }
-
-    public void setLikedComments(Set<Comment> likedComments) {
-        this.likedComments = likedComments;
-    }
-
-    @Override
-    public String toString() {
-        return "Client [id=" + id + ", user=" + user + ", reservations=" + reservations + ", pastExcursions="
-                + pastExcursions + ", likedComments=" + likedComments + "]";
     }
 
 }

@@ -17,6 +17,10 @@ public class TourGuide {
     @OneToMany(mappedBy = "tourGuide")
     private Set<Excursion> excursions;
 
+    @Version
+    @Column(columnDefinition = "integer DEFAULT 0", nullable = false)
+    private Integer version;
+
     public TourGuide(User user, Set<Excursion> excursions) {
         super();
         this.user = user;

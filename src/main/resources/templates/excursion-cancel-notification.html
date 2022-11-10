@@ -374,29 +374,18 @@ ul.social li {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     </style>
 </head>
 
 <body width="100%"
       style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
 
-<p>Zahtev za održavanje izleta</p>
+<p>Obaveštenje o izletu</p>
 <div style="text-align: center">
-    <h3>Datum održavanja: <span th:text="${date}"></span></h3>
-    <h3>Broj ljudi na izletu: <span th:text="${min}"></span> - <span th:text="${max}"></span></h3>
-    <p><a th:href="${approveUrl}" class="btn btn-primary">Odori zahtev</a>
-        <a th:href="${disapproveUrl}" class="btn btn-primary">Odbij zahtev</a></p>
+
+    <h3>Izlet koji se trebao da se održi <span th:text="${date}"></span> je otkazan. </h3>
+    <h3><span th:text="${reason}"></span></h3>
+
 </div>
 
 </body>

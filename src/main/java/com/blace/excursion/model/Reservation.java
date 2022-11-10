@@ -13,11 +13,9 @@ public class Reservation {
     private Long id;
 
     @ManyToOne
-    @MapsId("clientId")
     @JoinColumn(name = "client_id")
     private Client client;
     @ManyToOne
-    @MapsId("excursionId")
     @JoinColumn(name = "excursion_id")
     private Excursion excursion;
     @Column

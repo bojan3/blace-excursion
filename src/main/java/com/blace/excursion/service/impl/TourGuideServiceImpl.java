@@ -1,6 +1,7 @@
 package com.blace.excursion.service.impl;
 
 import com.blace.excursion.dto.*;
+import com.blace.excursion.emailContexts.ExcursionCancelNotification;
 import com.blace.excursion.emailContexts.LocationRequestEmail;
 import com.blace.excursion.model.*;
 import com.blace.excursion.repository.*;
@@ -25,7 +26,9 @@ public class TourGuideServiceImpl implements TourGuideService {
     private UserRepository userRepository;
     private VehicleRepository vehicleRepository;
     private EmailService emailService;
+    private RestaurantRepository restaurantRepository;
 
+    private MealRepository mealRepository;
     private LocationApproveTokenRepository locationApproveTokenRepository;
 
     private static final SecureRandom secureRandom = new SecureRandom();
@@ -36,7 +39,8 @@ public class TourGuideServiceImpl implements TourGuideService {
     public TourGuideServiceImpl(ExcursionRepository excursionRepository, LocationRepository locationRepository,
                                 TourGuideRepository tourGuideRepository, UserRepository userRepository,
                                 VehicleRepository vehicleRepository, EmailService emailService,
-                                LocationApproveTokenRepository locationApproveTokenRepository) {
+                                LocationApproveTokenRepository locationApproveTokenRepository, RestaurantRepository restaurantRepository,
+                                MealRepository mealRepository) {
         this.excursionRepository = excursionRepository;
         this.locationRepository = locationRepository;
         this.tourGuideRepository = tourGuideRepository;
@@ -44,20 +48,23 @@ public class TourGuideServiceImpl implements TourGuideService {
         this.vehicleRepository = vehicleRepository;
         this.emailService = emailService;
         this.locationApproveTokenRepository = locationApproveTokenRepository;
+        this.restaurantRepository = restaurantRepository;
+        this.mealRepository = mealRepository;
     }
+
 
     @Override
     public Message createExcursion(CreateExcursionDTO createExcursionDTO) throws MessagingException {
-        //TODO: treba da dobijes sad sa fronta listu vozila koje je vodic odabrao
-        Set<Vehicle> vehicles = null;
 
-//        if (vehicle == null) {
-//            return new Message("There is no avaliable vehicle for this excursion.", false);
-//        }
+//        sendCancelledExcursionNotification(new Date(), "Izlet se otkazuje zbog loših vremenskih uslova.", "bskokic@outlook.com");
 
         Set<Location> locations = locationRepository.findByIds(createExcursionDTO.getLocationIds());
-
+        Set<Vehicle> vehicles = vehicleRepository.findByIds(createExcursionDTO.getVehicleIds());
         TourGuide tourGuide = tourGuideRepository.getByUserId(getUserId());
+
+        if (!areVehiclesAvailable(vehicles, createExcursionDTO.getDate())) {
+            return new Message("The vehicle has been taken in the meantime.", false);
+        }
 
         if (!isTourGuideAvailable(tourGuide, createExcursionDTO.getDate())) {
             return new Message("You already have excursion that day.", false);
@@ -68,11 +75,36 @@ public class TourGuideServiceImpl implements TourGuideService {
                 createExcursionDTO.getMaxNumberOfPersons(), createExcursionDTO.getPrice(), tourGuide, locations,
                 vehicles);
 
+//        if (createExcursionDTO.getMealId() != null) {
+//            Meal meal = mealRepository.getOne(createExcursionDTO.getMealId());
+//            excursion.setMeal(meal);
+//        }
+
+        Meal meal = mealRepository.getOne(3l);
+        excursion.setMeal(meal);
+
+        excursion.setPrice(5000);
+
         excursionRepository.save(excursion);
 
         sendLocationMailRequest(excursion.getLocations(), excursion);
 
         return new Message("Excursion created.", true);
+    }
+
+    private boolean areVehiclesAvailable(Set<Vehicle> vehicles, Date excursionDate) {
+
+        Iterator<Vehicle> vehicleIterator = vehicles.iterator();
+        while (vehicleIterator.hasNext()) {
+            Iterator<Excursion> excursionIterator = vehicleIterator.next().getExcursions().iterator();
+            while (excursionIterator.hasNext()) {
+                java.sql.Date date = new java.sql.Date(excursionIterator.next().getDate().getTime());
+                if (date.equals(excursionDate)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void sendLocationMailRequest(Set<Location> locations, Excursion excursion) throws MessagingException {
@@ -90,6 +122,16 @@ public class TourGuideServiceImpl implements TourGuideService {
         }
     }
 
+    private void sendCancelledExcursionNotification(Date date, String reason, String email) throws MessagingException {
+
+        ExcursionCancelNotification mail = new ExcursionCancelNotification();
+        mail.init(email);
+        mail.setTo(email);
+        mail.setNotificationInfo(date, reason);
+        emailService.sendMail(mail);
+
+    }
+
     private String generateResponseUrl(Excursion excursion, Location location) {
         String token = generateNewToken();
         LocationApproveToken locationApproveToken = new LocationApproveToken(token, excursion, location);
@@ -103,7 +145,8 @@ public class TourGuideServiceImpl implements TourGuideService {
         return base64Encoder.encodeToString(randomBytes);
     }
 
-    private boolean isTourGuideAvailable(TourGuide tourGuide, Date excursionDate) {
+    private boolean isTourGuideAvailable(TourGuide tourGuide, Date excursionDate) throws MessagingException {
+
         Iterator<Excursion> it = tourGuide.getExcursions().iterator();
         while (it.hasNext()) {
             java.sql.Date date = new java.sql.Date(it.next().getDate().getTime());
@@ -166,9 +209,24 @@ public class TourGuideServiceImpl implements TourGuideService {
     }
 
     @Override
-    public List<ExcursionDTO> getExcursions() {
+    public List<TourguideExcursionDTO> getExcursions() {
         List<Excursion> excursions = excursionRepository.getByUserIdNotCancelled(getTourGuideId());
-        return excursionsToDTO(excursions);
+        return excursions.stream().map(excursion -> {
+            return new TourguideExcursionDTO(new Date(excursion.getDate().getTime() + 24 * 60 * 60 * 1000), excursion.getApproved(), excursion.getMaxNumberOfPersons(), locationsToString(excursion.getLocations()), mealToString(excursion.getMeal()), excursion.getPrice(), excursion.getReservatedTicketsNum());
+        }).collect(Collectors.toList());
+    }
+
+    private String mealToString(Meal meal) {
+        return meal.getRestaurant().getName() + " " + meal.getName();
+    }
+
+    private List<String> locationsToString(Set<Location> locations) {
+        List<String> locationNames = new ArrayList<String>();
+        Iterator<Location> it = locations.iterator();
+        while (it.hasNext()) {
+            locationNames.add(it.next().getName());
+        }
+        return locationNames;
     }
 
     private Long getTourGuideId() {
@@ -213,6 +271,27 @@ public class TourGuideServiceImpl implements TourGuideService {
             suggestions.addAll(toDTO(possibleSuggestions));
         }
         return suggestions;
+    }
+
+    @Override
+    public List<RestaurantDTO> getRestaurants() {
+        List<Restaurant> restaurants = this.restaurantRepository.findAll();
+
+        return restaurants.stream().map(restaurant -> {
+            return new RestaurantDTO(restaurant.getId(), restaurant.getName(), mealsToDTO(restaurant.getMeals()));
+        }).collect(Collectors.toList());
+    }
+
+    private List<MealDTO> mealsToDTO(Set<Meal> meals) {
+        List<MealDTO> mealDTOS = new ArrayList<MealDTO>();
+
+        Iterator<Meal> it = meals.iterator();
+        while (it.hasNext()) {
+            Meal meal = it.next();
+            mealDTOS.add(new MealDTO(meal.getId(), meal.getName(), meal.getPrice()));
+        }
+
+        return mealDTOS;
     }
 
     private List<List<VehicleDTO>> toDTO(List<List<Vehicle>> vehicleLists) {
