@@ -1,8 +1,7 @@
 package com.blace.excursion.dto;
 
-// DTO koji enkapsulira generisani JWT i njegovo trajanje koji se vracaju klijentu
 public class UserTokenState {
-	
+
     private String accessToken;
     private Long expiresIn;
 
@@ -31,5 +30,5 @@ public class UserTokenState {
     public void setExpiresIn(Long expiresIn) {
         this.expiresIn = expiresIn;
     }
-    
+
 }
