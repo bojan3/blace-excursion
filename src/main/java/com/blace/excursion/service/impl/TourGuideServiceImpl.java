@@ -58,7 +58,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 
 //        sendCancelledExcursionNotification(new Date(), "Izlet se otkazuje zbog loših vremenskih uslova.", "bskokic@outlook.com");
 
-        Set<Location> locations = locationRepository.findByIds(createExcursionDTO.getLocationIds());
+        List<Location> locations = locationRepository.findByIds(createExcursionDTO.getLocationIds());
         Set<Vehicle> vehicles = vehicleRepository.findByIds(createExcursionDTO.getVehicleIds());
         TourGuide tourGuide = tourGuideRepository.getByUserId(getUserId());
 
@@ -107,7 +107,7 @@ public class TourGuideServiceImpl implements TourGuideService {
         return true;
     }
 
-    private void sendLocationMailRequest(Set<Location> locations, Excursion excursion) throws MessagingException {
+    private void sendLocationMailRequest(List<Location> locations, Excursion excursion) throws MessagingException {
         Iterator<Location> it = locations.iterator();
         while (it.hasNext()) {
             Location location = it.next();
@@ -189,30 +189,10 @@ public class TourGuideServiceImpl implements TourGuideService {
     }
 
     @Override
-    public List<PastExcursionDTO> getPastExcursions() {
-        TourGuide tourGuide = tourGuideRepository.getByUserId(getUserId());
-        Iterator<Excursion> it = tourGuide.getExcursions().iterator();
-        Set<PastExcursion> pastExcursions = new HashSet<PastExcursion>();
-        while (it.hasNext()) {
-            pastExcursions.addAll(it.next().getPastExcursions());
-        }
-        return pastExcursionToDTO(pastExcursions);
-    }
-
-    private List<PastExcursionDTO> pastExcursionToDTO(Set<PastExcursion> pastExcursions) {
-        Iterator<PastExcursion> it = pastExcursions.iterator();
-        List<PastExcursionDTO> pastExcursionDTOs = new ArrayList<PastExcursionDTO>();
-        while (it.hasNext()) {
-            pastExcursionDTOs.add(new PastExcursionDTO(it.next()));
-        }
-        return pastExcursionDTOs;
-    }
-
-    @Override
     public List<TourguideExcursionDTO> getExcursions() {
         List<Excursion> excursions = excursionRepository.getByUserIdNotCancelled(getTourGuideId());
         return excursions.stream().map(excursion -> {
-            return new TourguideExcursionDTO(new Date(excursion.getDate().getTime() + 24 * 60 * 60 * 1000), excursion.getApproved(), excursion.getMaxNumberOfPersons(), locationsToString(excursion.getLocations()), mealToString(excursion.getMeal()), excursion.getPrice(), excursion.getReservatedTicketsNum());
+            return new TourguideExcursionDTO(new Date(excursion.getDate().getTime() + 24 * 60 * 60 * 1000), excursion.getApproved(), excursion.getMaxNumberOfPersons(), locationsToString(excursion.getLocations()), mealToString(excursion.getMeal()), excursion.getPrice(), excursion.getReservedTicketsNum());
         }).collect(Collectors.toList());
     }
 
@@ -220,7 +200,7 @@ public class TourGuideServiceImpl implements TourGuideService {
         return meal.getRestaurant().getName() + " " + meal.getName();
     }
 
-    private List<String> locationsToString(Set<Location> locations) {
+    private List<String> locationsToString(List<Location> locations) {
         List<String> locationNames = new ArrayList<String>();
         Iterator<Location> it = locations.iterator();
         while (it.hasNext()) {
@@ -233,18 +213,18 @@ public class TourGuideServiceImpl implements TourGuideService {
         return tourGuideRepository.getByUserId(getUserId()).getId();
     }
 
-    private List<ExcursionDTO> excursionsToDTO(List<Excursion> excursions) {
-        List<ExcursionDTO> excursionDTOs = new ArrayList<ExcursionDTO>();
-        for (Excursion excursion : excursions) {
-            ExcursionDTO excursionDTO = new ExcursionDTO(excursion);
-            excursionDTOs.add(excursionDTO);
-        }
-        return excursionDTOs;
-    }
+//    private List<ExcursionDTO> excursionsToDTO(List<Excursion> excursions) {
+//        List<ExcursionDTO> excursionDTOs = new ArrayList<ExcursionDTO>();
+//        for (Excursion excursion : excursions) {
+//            ExcursionDTO excursionDTO = new ExcursionDTO(excursion);
+//            excursionDTOs.add(excursionDTO);
+//        }
+//        return excursionDTOs;
+//    }
 
     @Override
     public Boolean cancelExcursion(Long excursionId) {
-        Excursion excursion = excursionRepository.getOne(excursionId);
+        Excursion excursion = excursionRepository.findById(excursionId).orElse(null);
         excursion.setCancelled(true);
         excursionRepository.save(excursion);
         return true;

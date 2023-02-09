@@ -1,16 +1,20 @@
 package com.blace.excursion.service.impl;
 
 import com.blace.excursion.dto.CommentDTO;
-import com.blace.excursion.dto.ExcursionDTO;
+import com.blace.excursion.dto.excursion.ExcursionDTO;
 import com.blace.excursion.dto.LocationDTO;
+import com.blace.excursion.dto.excursion.ExcursionFilter;
 import com.blace.excursion.model.*;
 import com.blace.excursion.repository.ExcursionRepository;
 import com.blace.excursion.repository.LocationApproveTokenRepository;
 import com.blace.excursion.repository.LocationRepository;
 import com.blace.excursion.repository.UserRepository;
 import com.blace.excursion.service.ExcursionService;
+import com.blace.excursion.util.AvailableExcursionSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ExcursionServiceImpl implements ExcursionService {
@@ -38,19 +43,29 @@ public class ExcursionServiceImpl implements ExcursionService {
     }
 
     @Override
-    public List<ExcursionDTO> getExcursions() {
-        List<Excursion> excursions = excursionRepository.findAllNotPassApproved();
-        return excursionsToDTO(excursions);
+    public List<ExcursionDTO> getAvailableExcursions(ExcursionFilter excursionFilter) {
+
+        AvailableExcursionSpecification excursionSpecification = new AvailableExcursionSpecification(excursionFilter);
+        Pageable pageSpecification = PageRequest.of(excursionFilter.getPageIndex(), excursionFilter.getPageSize());
+
+        Page<Excursion> excursions = this.excursionRepository.findAll(excursionSpecification, pageSpecification);
+
+        return excursions.stream().map(excursion -> new ExcursionDTO(excursion.getId(), excursion.getDate(),
+                excursion.getMaxNumberOfPersons(), excursion.getMinNumberOfPersons(),
+                excursion.getPrice(), getUserFullName(excursion.getTourGuide().getUser()),
+                locationsToDTO(excursion.getLocations()), getMealName(excursion.getMeal()),
+                getRestaurantName(excursion.getMeal()))).collect(Collectors.toList());
     }
 
-    private List<ExcursionDTO> excursionsToDTO(List<Excursion> excursions) {
-        List<ExcursionDTO> excursionDTOs = new ArrayList<ExcursionDTO>();
+    private String getUserFullName(User user){
+        return user.getFirstName() + " " + user.getLastName();
+    }
+    private String getMealName(Meal meal){
+        return meal != null ? meal.getName() : null;
+    }
 
-        for (Excursion excursion : excursions) {
-            ExcursionDTO excursionDTO = new ExcursionDTO(excursion);
-            excursionDTOs.add(excursionDTO);
-        }
-        return excursionDTOs;
+    private String getRestaurantName(Meal meal){
+        return meal != null ? meal.getRestaurant().getName() : null;
     }
 
     @Override
@@ -102,6 +117,11 @@ public class ExcursionServiceImpl implements ExcursionService {
         return locationsToDTO(locations);
     }
 
+    @Override
+    public List<ExcursionDTO> getExcursionsSorted(String type, String order) {
+        return null;
+    }
+
     private List<LocationDTO> locationsToDTO(List<Location> locations) {
         List<LocationDTO> locationDTOs = new ArrayList<LocationDTO>();
         for (Location location : locations) {
@@ -109,24 +129,6 @@ public class ExcursionServiceImpl implements ExcursionService {
             locationDTOs.add(locationDTO);
         }
         return locationDTOs;
-    }
-
-    @Override
-    public List<ExcursionDTO> getExcursionsSorted(String type, String order) {
-        List<Excursion> excursions = null;
-        if (order.equals("asc"))
-            excursions = excursionRepository.findAll(Sort.by(type).ascending());
-        else
-            excursions = excursionRepository.findAll(Sort.by(type).descending());
-        return excursionsToDTO(filterNotPass(excursions));
-    }
-
-    public List<Excursion> filterNotPass(List<Excursion> excursions) {
-        Iterator<Excursion> it = excursions.iterator();
-        while (it.hasNext())
-            if (!it.next().notPass())
-                it.remove();
-        return excursions;
     }
 
     @Override

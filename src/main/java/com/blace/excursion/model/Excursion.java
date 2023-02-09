@@ -1,12 +1,17 @@
 package com.blace.excursion.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 public class Excursion {
 
     @Id
@@ -34,7 +39,7 @@ public class Excursion {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "excursion_locations", joinColumns = @JoinColumn(name = "excursion_id"), inverseJoinColumns = @JoinColumn(name = "location_id"))
-    private Set<Location> locations;
+    private List<Location> locations;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "excursion_vehicles", joinColumns = @JoinColumn(name = "excursion_id"), inverseJoinColumns = @JoinColumn(name = "vehicle_id"))
@@ -46,7 +51,7 @@ public class Excursion {
     private Set<LocationApproveToken> LocationApproveTokens;
 
     @Column
-    private Integer reservatedTicketsNum;
+    private Integer reservedTicketsNum;
 
     @Version
     @Column(columnDefinition = "integer DEFAULT 0", nullable = false)
@@ -69,7 +74,7 @@ public class Excursion {
     }
 
     public Excursion(Date date, Boolean cancelled, Integer minNumberOfPersons, Integer maxNumberOfPersons, Integer price, TourGuide tourGuide,
-                     Set<Location> locations, Set<Vehicle> vehicles) {
+                     List<Location> locations, Set<Vehicle> vehicles) {
         super();
         this.date = date;
         this.cancelled = cancelled;
@@ -80,139 +85,7 @@ public class Excursion {
         this.locations = locations;
         this.vehicles = vehicles;
         this.approved = false;
-        this.reservatedTicketsNum = 0;
-    }
-
-    public Set<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(Set<Reservation> reservations) {
-        this.reservations = reservations;
-    }
-
-    public Set<PastExcursion> getPastExcursions() {
-        return pastExcursions;
-    }
-
-    public void setPastExcursions(Set<PastExcursion> pastExcursions) {
-        this.pastExcursions = pastExcursions;
-    }
-
-    public TourGuide getTourGuide() {
-        return tourGuide;
-    }
-
-    public void setTourGuide(TourGuide tourGuide) {
-        this.tourGuide = tourGuide;
-    }
-
-    public Set<Location> getLocations() {
-        return locations;
-    }
-
-    public void setLocations(Set<Location> locations) {
-        this.locations = locations;
-    }
-
-    public Set<Vehicle> getVehicles() {
-        return vehicles;
-    }
-
-    public void setVehicles(Set<Vehicle> vehicles) {
-        this.vehicles = vehicles;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Boolean getCancelled() {
-        return cancelled;
-    }
-
-    public void setCancelled(Boolean cancelled) {
-        this.cancelled = cancelled;
-    }
-
-    public Integer getMaxNumberOfPersons() {
-        return maxNumberOfPersons;
-    }
-
-    public void setMaxNumberOfPersons(Integer maxNumberOfPersons) {
-        this.maxNumberOfPersons = maxNumberOfPersons;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public Boolean notPass() {
-        return this.date.after(new Date());
-    }
-
-    public Boolean getApproved() {
-        return approved;
-    }
-
-    public void setApproved(Boolean approved) {
-        this.approved = approved;
-    }
-
-    public Integer getMinNumberOfPersons() {
-        return minNumberOfPersons;
-    }
-
-    public void setMinNumberOfPersons(Integer minNumberOfPersons) {
-        this.minNumberOfPersons = minNumberOfPersons;
-    }
-
-    public Set<LocationApproveToken> getLocationApproveTokens() {
-        return LocationApproveTokens;
-    }
-
-    public void setLocationApproveTokens(Set<LocationApproveToken> locationApproveTokens) {
-        LocationApproveTokens = locationApproveTokens;
-    }
-
-    public Integer getReservatedTicketsNum() {
-        return reservatedTicketsNum;
-    }
-
-    public void setReservatedTicketsNum(Integer reservatedTicketsNum) {
-        this.reservatedTicketsNum = reservatedTicketsNum;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    @Override
-    public String toString() {
-        return "Excursion [id=" + id + ", date=" + date + ", cancelled=" + cancelled + ", maxNumberOfPersons="
-                + maxNumberOfPersons + ", price=" + price + ", reservations=" + reservations + ", pastExcursions="
-                + pastExcursions + ", tourGuide=" + tourGuide + ", locations=" + locations + ", vehicles=" + vehicles
-                + "]";
+        this.reservedTicketsNum = 0;
     }
 
 }
