@@ -7,14 +7,12 @@ public class PastExcursionDTO {
 
     private PastExcursionKey id;
     private ExcursionDTO excursion;
-    private Integer commentsCount;
     private Integer numberOfPersons;
 
     public PastExcursionDTO(PastExcursion pastExcursion) {
         super();
         this.id = pastExcursion.getId();
         this.excursion = new ExcursionDTO(pastExcursion.getExcursion());
-        this.commentsCount = pastExcursion.getComments().size();
         this.numberOfPersons = pastExcursion.getNumberOfPersons();
     }
 
@@ -41,20 +39,6 @@ public class PastExcursionDTO {
 
     public void setExcursion(ExcursionDTO excursion) {
         this.excursion = excursion;
-    }
-
-    public Integer getCommentsCount() {
-        return commentsCount;
-    }
-
-    public void setCommentsCount(Integer commentsCount) {
-        this.commentsCount = commentsCount;
-    }
-
-    @Override
-    public String toString() {
-        return "PastExcursionDTO [id=" + id + ", excursionDTO=" + excursion + ", commentsCount=" + commentsCount
-                + "]";
     }
 
 }

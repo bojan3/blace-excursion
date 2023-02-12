@@ -1,9 +1,11 @@
 package com.blace.excursion.service.impl;
 
-import com.blace.excursion.dto.CommentDTO;
 import com.blace.excursion.dto.ExcursionDTO;
 import com.blace.excursion.dto.LocationDTO;
-import com.blace.excursion.model.*;
+import com.blace.excursion.model.Excursion;
+import com.blace.excursion.model.Location;
+import com.blace.excursion.model.LocationApproveToken;
+import com.blace.excursion.model.User;
 import com.blace.excursion.repository.ExcursionRepository;
 import com.blace.excursion.repository.LocationApproveTokenRepository;
 import com.blace.excursion.repository.LocationRepository;
@@ -53,14 +55,6 @@ public class ExcursionServiceImpl implements ExcursionService {
         return excursionDTOs;
     }
 
-    @Override
-    public List<CommentDTO> getComments(Long excursionId) {
-//		Excursion excursion = excursionRepository.getOne(excursionId);
-//		List<Comment> comments = getCommentsFromLocation(excursion.getLocation());
-//		return commentsToDTO(comments, getUserId());
-        return null;
-
-    }
 
     private Long getUserId() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -68,33 +62,6 @@ public class ExcursionServiceImpl implements ExcursionService {
         return user.getId();
     }
 
-    private List<Comment> getCommentsFromLocation(Location location) {
-        Set<Excursion> excursionsOnLocation = location.getExcursions();
-        List<Comment> comments = new ArrayList<Comment>();
-        Iterator<Excursion> it = excursionsOnLocation.iterator();
-        while (it.hasNext()) {
-            comments.addAll(getCommentsFromPastExcursion(it.next().getPastExcursions()));
-        }
-        return comments;
-    }
-
-    private List<Comment> getCommentsFromPastExcursion(Set<PastExcursion> pastExcursions) {
-        Iterator<PastExcursion> it = pastExcursions.iterator();
-        List<Comment> comments = new ArrayList<Comment>();
-        while (it.hasNext()) {
-            comments.addAll(it.next().getComments());
-        }
-        return comments;
-    }
-
-    private List<CommentDTO> commentsToDTO(List<Comment> comments, Long accountId) {
-        List<CommentDTO> commentDTOs = new ArrayList<CommentDTO>();
-        for (Comment comment : comments) {
-            CommentDTO commentDTO = new CommentDTO(comment, accountId);
-            commentDTOs.add(commentDTO);
-        }
-        return commentDTOs;
-    }
 
     @Override
     public List<LocationDTO> getLocations() {
