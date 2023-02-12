@@ -1,7 +1,6 @@
 package com.blace.excursion.model;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 public class PastExcursion {
@@ -16,18 +15,7 @@ public class PastExcursion {
     @MapsId("excursionId")
     @JoinColumn(name = "excursion_id")
     private Excursion excursion;
-    @OneToMany(mappedBy = "pastExcursion")
-    private Set<Comment> comments;
     private Integer numberOfPersons;
-
-    public PastExcursion(PastExcursionKey id, Client client, Excursion excursion, Set<Comment> comments, Integer numberOfPersons) {
-        super();
-        this.id = id;
-        this.client = client;
-        this.excursion = excursion;
-        this.comments = comments;
-        this.numberOfPersons = numberOfPersons;
-    }
 
     public Integer getNumberOfPersons() {
         return numberOfPersons;
@@ -63,20 +51,6 @@ public class PastExcursion {
 
     public void setExcursion(Excursion excursion) {
         this.excursion = excursion;
-    }
-
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
-    }
-
-    @Override
-    public String toString() {
-        return "PastExcursion [id=" + id + ", client=" + client + ", excursion=" + excursion + ", comments=" + comments
-                + "]";
     }
 
 }
