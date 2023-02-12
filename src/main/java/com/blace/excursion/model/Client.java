@@ -16,9 +16,6 @@ public class Client {
     private Set<Reservation> reservations;
     @OneToMany(mappedBy = "client")
     private Set<PastExcursion> pastExcursions;
-//    @ManyToMany
-//    @JoinTable(name = "liked_commnets", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "comment_id"))
-//    private Set<Comment> likedComments;
 
     public Client(User user) {
         super();
