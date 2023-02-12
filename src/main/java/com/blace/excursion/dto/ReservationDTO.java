@@ -1,5 +1,6 @@
 package com.blace.excursion.dto;
 
+import com.blace.excursion.dto.excursion.ExcursionDTO;
 import com.blace.excursion.model.Reservation;
 
 public class ReservationDTO {
@@ -11,9 +12,8 @@ public class ReservationDTO {
     public ReservationDTO(Reservation reservation) {
         super();
         this.id = reservation.getId();
-        this.excursion = new ExcursionDTO(reservation.getExcursion());
+        this.excursion = new ExcursionDTO();
         this.numberOfPersons = reservation.getNumberOfPersons();
-
     }
 
     public Long getId() {

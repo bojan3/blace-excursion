@@ -1,15 +1,16 @@
 package com.blace.excursion.service;
 
 import com.blace.excursion.dto.CommentDTO;
-import com.blace.excursion.dto.ExcursionDTO;
+import com.blace.excursion.dto.excursion.ExcursionDTO;
 import com.blace.excursion.dto.LocationDTO;
+import com.blace.excursion.dto.excursion.ExcursionFilter;
 
 import java.util.List;
 
 
 public interface ExcursionService {
 
-    List<ExcursionDTO> getExcursions();
+    List<ExcursionDTO> getAvailableExcursions(ExcursionFilter ExcursionFilter);
 
     List<CommentDTO> getComments(Long excursionId);
 

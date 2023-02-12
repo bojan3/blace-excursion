@@ -32,12 +32,6 @@ public class TourGuideController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @GetMapping("/pastExcursions")
-    public ResponseEntity<List<PastExcursionDTO>> getPastExcursions() {
-        List<PastExcursionDTO> pastExcursionDTOs = tourGuideService.getPastExcursions();
-        return new ResponseEntity<>(pastExcursionDTOs, HttpStatus.OK);
-    }
-
     @GetMapping("/excursions")
     public ResponseEntity<List<TourguideExcursionDTO>> getExcursions() {
         List<TourguideExcursionDTO> excursionDTOs = tourGuideService.getExcursions();

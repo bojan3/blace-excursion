@@ -1,7 +1,6 @@
 package com.blace.excursion.service.impl;
 
 import com.blace.excursion.dto.CreateReservationDTO;
-import com.blace.excursion.dto.PastExcursionDTO;
 import com.blace.excursion.dto.ReservationDTO;
 import com.blace.excursion.model.*;
 import com.blace.excursion.repository.ClientRepository;
@@ -92,15 +91,6 @@ public class ClientServiceImpl implements ClientService {
         return reservationsToDTO(pastReservations);
     }
 
-    private List<PastExcursionDTO> pastExcursionToDTO(Set<PastExcursion> pastExcursions) {
-        Iterator<PastExcursion> it = pastExcursions.iterator();
-        List<PastExcursionDTO> pastExcursionDTOs = new ArrayList<PastExcursionDTO>();
-        while (it.hasNext()) {
-            pastExcursionDTOs.add(new PastExcursionDTO(it.next()));
-        }
-        return pastExcursionDTOs;
-    }
-
     @Override
     public Boolean cancelReservation(Long reservationId) {
         Client client = clientRepository.getByUserId(getUserId());
@@ -116,7 +106,7 @@ public class ClientServiceImpl implements ClientService {
 
     public void createReservation(CreateReservationDTO createReservationDTO) {
         Client client = getClient();
-        Excursion excursion = excursionRepository.getOne(createReservationDTO.getExcursionId());
+        Excursion excursion = excursionRepository.findById(createReservationDTO.getExcursionId()).orElse(null);
         Reservation reservation = new Reservation(client, excursion, createReservationDTO.getNumOfPersons());
         System.out.println(reservation.getClient().getId());
         reservationRepository.save(reservation);

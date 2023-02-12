@@ -9,8 +9,6 @@ public interface TourGuideService {
 
     Message createExcursion(CreateExcursionDTO createExcursionDTO) throws MessagingException;
 
-    List<PastExcursionDTO> getPastExcursions();
-
     List<TourguideExcursionDTO> getExcursions();
 
     Boolean cancelExcursion(Long excursionId);
