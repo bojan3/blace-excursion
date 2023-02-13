@@ -2,6 +2,7 @@ package com.blace.excursion.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Excursion {
 
     @Id
@@ -69,15 +71,12 @@ public class Excursion {
         this.meal = meal;
     }
 
-    public Excursion() {
-        super();
-    }
 
-    public Excursion(Date date, Boolean cancelled, Integer minNumberOfPersons, Integer maxNumberOfPersons, Integer price, TourGuide tourGuide,
-                     List<Location> locations, Set<Vehicle> vehicles) {
+    public Excursion(Date date, Integer minNumberOfPersons, Integer maxNumberOfPersons, Integer price, TourGuide tourGuide,
+                     List<Location> locations, Set<Vehicle> vehicles, Meal meal) {
         super();
         this.date = date;
-        this.cancelled = cancelled;
+        this.cancelled = false;
         this.minNumberOfPersons = minNumberOfPersons;
         this.maxNumberOfPersons = maxNumberOfPersons;
         this.price = price;
@@ -86,6 +85,7 @@ public class Excursion {
         this.vehicles = vehicles;
         this.approved = false;
         this.reservedTicketsNum = 0;
+        this.meal = meal;
     }
 
 }

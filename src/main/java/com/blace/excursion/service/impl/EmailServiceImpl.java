@@ -32,12 +32,10 @@ public class EmailServiceImpl implements EmailService {
         context.setVariables(email.getContext());
         String emailContent = templateEngine.process(email.getTemplateLocation(), context);
 
-        System.out.println("poslato na email: " + email.getTo());
         mimeMessageHelper.setTo(email.getTo());
         mimeMessageHelper.setSubject(email.getSubject());
         mimeMessageHelper.setFrom(email.getFrom());
         mimeMessageHelper.setText(emailContent, true);
         emailSender.send(message);
-
     }
 }
