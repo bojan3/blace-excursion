@@ -1,8 +1,11 @@
 package com.blace.excursion.service.impl;
 
 import com.blace.excursion.dto.*;
+import com.blace.excursion.dto.excursion.CreateExcursionDTO;
+import com.blace.excursion.dto.excursion.ExcursionDTO;
 import com.blace.excursion.emailContexts.ExcursionCancelNotification;
 import com.blace.excursion.emailContexts.LocationRequestEmail;
+import com.blace.excursion.exception.FailedOrganizeExcursionException;
 import com.blace.excursion.model.*;
 import com.blace.excursion.repository.*;
 import com.blace.excursion.service.EmailService;
@@ -34,7 +37,6 @@ public class TourGuideServiceImpl implements TourGuideService {
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
 
-
     @Autowired
     public TourGuideServiceImpl(ExcursionRepository excursionRepository, LocationRepository locationRepository,
                                 TourGuideRepository tourGuideRepository, UserRepository userRepository,
@@ -51,45 +53,58 @@ public class TourGuideServiceImpl implements TourGuideService {
         this.restaurantRepository = restaurantRepository;
         this.mealRepository = mealRepository;
     }
-
-
+    
     @Override
-    public Message createExcursion(CreateExcursionDTO createExcursionDTO) throws MessagingException {
+    public ExcursionDTO createExcursion(CreateExcursionDTO createExcursionDTO) throws FailedOrganizeExcursionException, MessagingException {
 
-//        sendCancelledExcursionNotification(new Date(), "Izlet se otkazuje zbog loših vremenskih uslova.", "bskokic@outlook.com");
-
-        Set<Location> locations = locationRepository.findByIds(createExcursionDTO.getLocationIds());
+        List<Location> locations = locationRepository.findByIds(createExcursionDTO.getLocationIds());
         Set<Vehicle> vehicles = vehicleRepository.findByIds(createExcursionDTO.getVehicleIds());
         TourGuide tourGuide = tourGuideRepository.getByUserId(getUserId());
 
         if (!areVehiclesAvailable(vehicles, createExcursionDTO.getDate())) {
-            return new Message("The vehicle has been taken in the meantime.", false);
+            throw new FailedOrganizeExcursionException("The vehicle has been taken in the meantime.");
         }
 
         if (!isTourGuideAvailable(tourGuide, createExcursionDTO.getDate())) {
-            return new Message("You already have excursion that day.", false);
+            throw new FailedOrganizeExcursionException("You already have excursion that day.");
         }
 
-        // TO-DO real minimum number of persons
-        Excursion excursion = new Excursion(createExcursionDTO.getDate(), false, createExcursionDTO.getMinNumberOfPersons(),
+        Meal meal = (createExcursionDTO.getMealId() != null) ? mealRepository.getOne(createExcursionDTO.getMealId()) : null;
+
+        Excursion excursion = new Excursion(createExcursionDTO.getDate(), createExcursionDTO.getMinNumberOfPersons(),
                 createExcursionDTO.getMaxNumberOfPersons(), createExcursionDTO.getPrice(), tourGuide, locations,
-                vehicles);
+                vehicles, meal);
 
-//        if (createExcursionDTO.getMealId() != null) {
-//            Meal meal = mealRepository.getOne(createExcursionDTO.getMealId());
-//            excursion.setMeal(meal);
-//        }
-
-        Meal meal = mealRepository.getOne(3l);
-        excursion.setMeal(meal);
-
-        excursion.setPrice(5000);
-
-        excursionRepository.save(excursion);
+        Excursion savedExcursion = excursionRepository.save(excursion);
 
         sendLocationMailRequest(excursion.getLocations(), excursion);
 
-        return new Message("Excursion created.", true);
+        return new ExcursionDTO(savedExcursion.getId(), savedExcursion.getDate(),
+                savedExcursion.getMaxNumberOfPersons(), savedExcursion.getReservedTicketsNum(),
+                savedExcursion.getPrice(), getUserFullName(savedExcursion.getTourGuide().getUser()),
+                locationsToDTO(savedExcursion.getLocations()), getMealName(savedExcursion.getMeal()),
+                getRestaurantName(savedExcursion.getMeal()));
+    }
+
+    private String getUserFullName(User user){
+        return user.getFirstName() + " " + user.getLastName();
+    }
+
+    private String getMealName(Meal meal){
+        return meal != null ? meal.getName() : null;
+    }
+
+    private String getRestaurantName(Meal meal){
+        return meal != null ? meal.getRestaurant().getName() : null;
+    }
+
+    private List<LocationDTO> locationsToDTO(List<Location> locations) {
+        List<LocationDTO> locationDTOs = new ArrayList<LocationDTO>();
+        for (Location location : locations) {
+            LocationDTO locationDTO = new LocationDTO(location);
+            locationDTOs.add(locationDTO);
+        }
+        return locationDTOs;
     }
 
     private boolean areVehiclesAvailable(Set<Vehicle> vehicles, Date excursionDate) {
@@ -107,7 +122,7 @@ public class TourGuideServiceImpl implements TourGuideService {
         return true;
     }
 
-    private void sendLocationMailRequest(Set<Location> locations, Excursion excursion) throws MessagingException {
+    private void sendLocationMailRequest(List<Location> locations, Excursion excursion) throws MessagingException {
         Iterator<Location> it = locations.iterator();
         while (it.hasNext()) {
             Location location = it.next();
@@ -145,7 +160,7 @@ public class TourGuideServiceImpl implements TourGuideService {
         return base64Encoder.encodeToString(randomBytes);
     }
 
-    private boolean isTourGuideAvailable(TourGuide tourGuide, Date excursionDate) throws MessagingException {
+    private boolean isTourGuideAvailable(TourGuide tourGuide, Date excursionDate){
 
         Iterator<Excursion> it = tourGuide.getExcursions().iterator();
         while (it.hasNext()) {
@@ -189,30 +204,10 @@ public class TourGuideServiceImpl implements TourGuideService {
     }
 
     @Override
-    public List<PastExcursionDTO> getPastExcursions() {
-        TourGuide tourGuide = tourGuideRepository.getByUserId(getUserId());
-        Iterator<Excursion> it = tourGuide.getExcursions().iterator();
-        Set<PastExcursion> pastExcursions = new HashSet<PastExcursion>();
-        while (it.hasNext()) {
-            pastExcursions.addAll(it.next().getPastExcursions());
-        }
-        return pastExcursionToDTO(pastExcursions);
-    }
-
-    private List<PastExcursionDTO> pastExcursionToDTO(Set<PastExcursion> pastExcursions) {
-        Iterator<PastExcursion> it = pastExcursions.iterator();
-        List<PastExcursionDTO> pastExcursionDTOs = new ArrayList<PastExcursionDTO>();
-        while (it.hasNext()) {
-            pastExcursionDTOs.add(new PastExcursionDTO(it.next()));
-        }
-        return pastExcursionDTOs;
-    }
-
-    @Override
     public List<TourguideExcursionDTO> getExcursions() {
         List<Excursion> excursions = excursionRepository.getByUserIdNotCancelled(getTourGuideId());
         return excursions.stream().map(excursion -> {
-            return new TourguideExcursionDTO(new Date(excursion.getDate().getTime() + 24 * 60 * 60 * 1000), excursion.getApproved(), excursion.getMaxNumberOfPersons(), locationsToString(excursion.getLocations()), mealToString(excursion.getMeal()), excursion.getPrice(), excursion.getReservatedTicketsNum());
+            return new TourguideExcursionDTO(new Date(excursion.getDate().getTime() + 24 * 60 * 60 * 1000), excursion.getApproved(), excursion.getMaxNumberOfPersons(), locationsToString(excursion.getLocations()), mealToString(excursion.getMeal()), excursion.getPrice(), excursion.getReservedTicketsNum());
         }).collect(Collectors.toList());
     }
 
@@ -220,7 +215,7 @@ public class TourGuideServiceImpl implements TourGuideService {
         return meal.getRestaurant().getName() + " " + meal.getName();
     }
 
-    private List<String> locationsToString(Set<Location> locations) {
+    private List<String> locationsToString(List<Location> locations) {
         List<String> locationNames = new ArrayList<String>();
         Iterator<Location> it = locations.iterator();
         while (it.hasNext()) {
@@ -233,18 +228,9 @@ public class TourGuideServiceImpl implements TourGuideService {
         return tourGuideRepository.getByUserId(getUserId()).getId();
     }
 
-    private List<ExcursionDTO> excursionsToDTO(List<Excursion> excursions) {
-        List<ExcursionDTO> excursionDTOs = new ArrayList<ExcursionDTO>();
-        for (Excursion excursion : excursions) {
-            ExcursionDTO excursionDTO = new ExcursionDTO(excursion);
-            excursionDTOs.add(excursionDTO);
-        }
-        return excursionDTOs;
-    }
-
     @Override
     public Boolean cancelExcursion(Long excursionId) {
-        Excursion excursion = excursionRepository.getOne(excursionId);
+        Excursion excursion = excursionRepository.findById(excursionId).orElse(null);
         excursion.setCancelled(true);
         excursionRepository.save(excursion);
         return true;
@@ -326,11 +312,8 @@ public class TourGuideServiceImpl implements TourGuideService {
             Vehicle vehicle = it.next();
             if (!isVehicleAvalible(vehicle, excursionDate)) {
                 it.remove();
-                System.out.println("Zauzeto vozilo: " + vehicle.toString());
-
             }
         }
         return vehicles;
     }
-
 }
