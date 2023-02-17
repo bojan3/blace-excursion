@@ -18,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -98,23 +97,18 @@ public class ExcursionServiceImpl implements ExcursionService {
         LocationApproveToken LAToken = this.locationApproveTokenRepository.getByToken(token);
         LAToken.setApproved(true);
         this.locationApproveTokenRepository.save(LAToken);
-        System.out.println("ID tokena je" + LAToken.getId());
         Excursion excursion = LAToken.getExcursion();
 
         if (allApproved(excursion)) {
-//        if (allApproved(excursion)) {
             excursion.setApproved(true);
             this.excursionRepository.save(excursion);
-            //TODO: send tourguide mail that excrusion is approved
-            System.out.println("TODO: send tourguide mail that excrusion is approved");
         }
     }
 
     private boolean allApproved(Excursion excursion) {
         Set<LocationApproveToken> tokens = this.locationApproveTokenRepository.findAllByExcursionId(excursion.getId());
-        Iterator<LocationApproveToken> it = tokens.iterator();
-        while (it.hasNext()) {
-            if (!it.next().getApproved())
+        for (LocationApproveToken token : tokens) {
+            if (!token.getApproved())
                 return false;
         }
         return true;
@@ -123,8 +117,15 @@ public class ExcursionServiceImpl implements ExcursionService {
     @Override
     public void disapproveLocation(String token) {
         LocationApproveToken LAToken = this.locationApproveTokenRepository.getByToken(token);
-        //TODO: send tourguide mail that excrusion can't happen
-        System.out.println("TODO: send tourguide mail that excrusion can't happen");
+        LAToken.setApproved(false);
+        this.locationApproveTokenRepository.save(LAToken);
+
+        Excursion excursion = LAToken.getExcursion();
+        if (excursion.getApproved()){
+            excursion.setApproved(false);
+            excursionRepository.save(excursion);
+        }
+
     }
 
 
